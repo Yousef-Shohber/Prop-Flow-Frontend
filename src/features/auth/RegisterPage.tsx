@@ -95,6 +95,7 @@ export default function RegisterPage() {
 
   return (
     <AuthLayout
+      variant="register"
       title={t("auth.register.title")}
       subtitle={t("auth.register.subtitle")}
       footer={
