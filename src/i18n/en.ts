@@ -361,6 +361,88 @@ const en = {
     latestUnitsText: "The most recently added units in your portfolio.",
     seeAllUnits: "See all units",
     heroAlt: "A residential building at dusk",
+    story: {
+      eyebrow: "How it works",
+      step: "Step {n}",
+      TENANT: {
+        title: "From search to keys in three steps",
+        s1: {
+          title: "Find a place you like",
+          text: "Search by city, type or name and compare available units with real photos.",
+        },
+        s2: {
+          title: "Send a request",
+          text: "Request a unit in a tap. The owner reviews it and you follow the answer here.",
+        },
+        s3: {
+          title: "Live with confidence",
+          text: "Keep your lease, renewals and repair requests in one place.",
+        },
+      },
+      OWNER: {
+        title: "Run your rentals without the chase",
+        s1: {
+          title: "List your property",
+          text: "Add buildings, villas or studios together with their units and photos.",
+        },
+        s2: {
+          title: "Review requests",
+          text: "Approve a tenant and the lease is created for you.",
+        },
+        s3: {
+          title: "Stay on top",
+          text: "Track renewals, repairs and activity from one dashboard.",
+        },
+      },
+      ADMIN: {
+        title: "Oversee the whole platform",
+        s1: {
+          title: "Verify owners",
+          text: "Review new owners before their listings go live.",
+        },
+        s2: {
+          title: "Manage people",
+          text: "Control roles and account status across the system.",
+        },
+        s3: {
+          title: "Follow every action",
+          text: "Use analytics and the audit log to see what happened and who did it.",
+        },
+      },
+      MAINTENANCE_STAFF: {
+        title: "Every job, from assignment to done",
+        s1: {
+          title: "Get assigned",
+          text: "New jobs arrive with photos, priority and the unit they belong to.",
+        },
+        s2: {
+          title: "Start the work",
+          text: "Mark a job as started so the tenant knows you are on it.",
+        },
+        s3: {
+          title: "Close it with proof",
+          text: "Describe the fix and add photos, then complete the job.",
+        },
+      },
+    },
+    endCta: {
+      TENANT: {
+        title: "Ready for your next place?",
+        text: "Browse every available unit and send a request in a minute.",
+      },
+      OWNER: {
+        title: "Have another property to list?",
+        text: "Add it with its units and start receiving requests.",
+      },
+      ADMIN: {
+        title: "See how the platform is doing",
+        text: "Open analytics for the full picture of properties, leases and repairs.",
+      },
+      MAINTENANCE_STAFF: {
+        title: "Your jobs are waiting",
+        text: "Open your assigned jobs and keep tenants up to date.",
+      },
+    },
     sub: {
       TENANT:
         "Find your next place, follow your requests and keep your lease and repairs in one spot.",

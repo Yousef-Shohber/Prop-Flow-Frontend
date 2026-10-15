@@ -30,6 +30,8 @@
   --shadow-lg:
     0 2px 4px rgb(23 32 46 / 0.05), 0 30px 60px -28px rgb(23 32 46 / 0.35);
 
+  --logo-roof: var(--accent);
+
   /* semantic status pairs: background / foreground / dot */
   --green-bg: #dcf3e4;
   --green-fg: #0f5a31;
@@ -73,6 +75,8 @@
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
   --shadow-md: 0 1px 2px rgb(0 0 0 / 0.4), 0 14px 32px -14px rgb(0 0 0 / 0.65);
   --shadow-lg: 0 2px 4px rgb(0 0 0 / 0.4), 0 34px 70px -28px rgb(0 0 0 / 0.8);
+
+  --logo-roof: #fff;
 
   --green-bg: #143524;
   --green-fg: #7fe0a6;

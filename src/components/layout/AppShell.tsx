@@ -7,6 +7,7 @@ import { useT } from "@/i18n";
 import { paths } from "@/routes/paths";
 import { Banner } from "../ui/Misc";
 import { Button } from "../ui/Button";
+import { ErrorBoundary } from "../ui/ErrorBoundary";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
 
@@ -67,9 +68,11 @@ export function AppShell() {
               {t("layout.unverified")}
             </Banner>
           )}
-          <PageTransition>
-            <Outlet />
-          </PageTransition>
+          <ErrorBoundary key={pathname}>
+            <PageTransition>
+              <Outlet />
+            </PageTransition>
+          </ErrorBoundary>
         </main>
       </div>
     </div>

@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
 import { ArrowRight, Building2, DoorOpen, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/Button";
@@ -7,6 +9,7 @@ import { useCatalogTotals } from "@/hooks/discover";
 import { useI18n } from "@/i18n";
 import { todayISO } from "@/lib/dates";
 import { formatDate } from "@/lib/format";
+import { gsap, prefersReducedMotion } from "@/lib/motion";
 import { paths } from "@/routes/paths";
 import type { UserRole } from "@/types/enums";
 
@@ -56,31 +59,71 @@ function HeroStat({
   );
 }
 
-/** Decorative photo collage; real listing photos only ever appear on cards, so this stays aria-hidden. */
+/**
+ * Decorative photo collage. Each photo sits in a wrapper that drifts at its own speed while the page scrolls
+ * (data-speed) and pops in on load (data-pop); real listing photos only ever appear on cards, so it stays aria-hidden.
+ */
 function Collage() {
   return (
-    <div aria-hidden className="relative hidden h-72 lg:block">
-      <Photo
-        name="gallery-tower"
-        variant="tower"
-        alt=""
-        eager
-        className="absolute end-0 top-0 h-48 w-60 rounded-2xl border border-white/20 shadow-pop"
-      />
-      <Photo
-        name="gallery-villa"
-        variant="villa"
-        alt=""
-        eager
-        className="absolute start-2 top-14 h-44 w-52 rounded-2xl border border-white/20 shadow-pop"
-      />
-      <Photo
-        name="gallery-interior"
-        variant="interior"
-        alt=""
-        className="float-slow absolute bottom-0 end-12 h-36 w-48 rounded-2xl border border-white/20 shadow-pop"
-      />
-      <span className="absolute -start-2 bottom-6 size-24 rounded-full bg-accent/30 blur-2xl" />
+    <div aria-hidden className="relative hidden h-[26rem] lg:block">
+      <span className="absolute -start-6 bottom-2 size-44 rounded-full bg-accent/30 blur-3xl" />
+      <span className="absolute end-16 top-0 size-36 rounded-full bg-white/10 blur-3xl" />
+      <div data-speed="-36" className="absolute end-0 top-0">
+        <div data-pop>
+          <Photo
+            name="gallery-tower2"
+            variant="tower"
+            alt=""
+            eager
+            className="h-80 w-56 rounded-3xl border border-white/20 shadow-pop"
+          />
+        </div>
+      </div>
+      <div data-speed="28" className="absolute start-0 top-16">
+        <div data-pop>
+          <Photo
+            name="gallery-villa"
+            variant="villa"
+            alt=""
+            eager
+            className="h-52 w-64 rounded-3xl border border-white/20 shadow-pop"
+          />
+        </div>
+      </div>
+      <div data-speed="-18" className="absolute bottom-0 end-44">
+        <div data-pop>
+          <Photo
+            name="gallery-interior"
+            variant="interior"
+            alt=""
+            className="float-slow h-40 w-52 rounded-3xl border border-white/20 shadow-pop"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Small screens have no room for the collage, so a compact strip keeps the hero photographic. */
+function PhotoStrip() {
+  return (
+    <div aria-hidden className="mt-7 flex gap-3 lg:hidden">
+      {(
+        [
+          ["gallery-villa", "villa"],
+          ["gallery-tower2", "tower"],
+          ["gallery-interior", "interior"],
+        ] as const
+      ).map(([name, variant]) => (
+        <Photo
+          key={name}
+          name={name}
+          variant={variant}
+          alt=""
+          eager
+          className="h-24 flex-1 rounded-2xl border border-white/20 shadow-pop"
+        />
+      ))}
     </div>
   );
 }
@@ -116,14 +159,54 @@ export function HomeHero({
     MAINTENANCE_STAFF: { primary: [t("home.ctaStaff"), paths.maintenance] },
   };
   const c = cta[role];
+  const ref = useRef<HTMLElement>(null);
+  const title = t(`home.greeting.${dayPart(new Date().getHours())}`, { name });
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion() || !ref.current) return;
+      gsap.from("[data-word]", {
+        yPercent: 110,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.07,
+        delay: 0.15,
+      });
+      gsap.from("[data-pop]", {
+        opacity: 0,
+        y: 36,
+        scale: 0.94,
+        duration: 0.9,
+        ease: "power3.out",
+        stagger: 0.12,
+        delay: 0.2,
+      });
+      gsap.utils.toArray<HTMLElement>("[data-speed]").forEach((el) => {
+        gsap.to(el, {
+          y: Number(el.dataset.speed),
+          ease: "none",
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      });
+    },
+    { scope: ref },
+  );
+
   return (
     <section
+      ref={ref}
       data-rise
       aria-labelledby="home-title"
       className="hero-navy grain relative isolate overflow-hidden rounded-sheet border border-white/10 text-white"
     >
       <div
-        className={`grid items-center gap-8 px-6 pt-9 sm:px-10 sm:pt-12 lg:grid-cols-[1.15fr_0.85fr] ${overlap ? "pb-24 sm:pb-28" : "pb-9 sm:pb-12"}`}
+        className={`grid items-center gap-8 px-6 pt-10 sm:px-10 sm:pt-16 lg:min-h-[30rem] lg:grid-cols-[1.1fr_0.9fr] ${overlap ? "pb-28 sm:pb-36" : "pb-10 sm:pb-16"}`}
       >
         <div className="min-w-0">
           <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/85">
@@ -132,9 +215,18 @@ export function HomeHero({
           </p>
           <h1
             id="home-title"
-            className="text-3xl font-bold sm:text-[2.6rem] sm:leading-[1.15]"
+            className="text-3xl font-bold sm:text-5xl sm:leading-[1.12]"
           >
-            {t(`home.greeting.${dayPart(new Date().getHours())}`, { name })}
+            {title.split(" ").map((w, i) => (
+              <span
+                key={i}
+                className="me-[0.28em] inline-block overflow-hidden align-bottom"
+              >
+                <span data-word className="inline-block">
+                  {w}
+                </span>
+              </span>
+            ))}
           </h1>
           <p className="mt-3 max-w-xl text-base text-white/80 sm:text-lg">
             {t(`home.sub.${role}`)}
@@ -192,6 +284,7 @@ export function HomeHero({
           )}
         </div>
         <Collage />
+        <PhotoStrip />
       </div>
     </section>
   );

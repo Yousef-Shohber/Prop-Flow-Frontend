@@ -1,10 +1,12 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { DiscoverSection } from "@/features/discover/DiscoverSection";
 import { useAuth } from "@/hooks/useAuth";
-import { gsap, prefersReducedMotion } from "@/lib/motion";
+import { gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/motion";
 import { FeaturedUnits } from "./FeaturedUnits";
+import { HomeCta } from "./Homecta";
 import { HomeHero } from "./HomeHero";
+import { HomeStory } from "./Homestory";
 import { ManagerView, StaffView, TenantView } from "./RoleViews";
 
 /**
@@ -28,6 +30,21 @@ export default function HomePage() {
     },
     { scope: root },
   );
+  // data loads after mount and moves everything below it, so scroll positions are re-measured when the page height changes
+  useEffect(() => {
+    const el = root.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    let id: number;
+    const ro = new ResizeObserver(() => {
+      window.clearTimeout(id);
+      id = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+    });
+    ro.observe(el);
+    return () => {
+      window.clearTimeout(id);
+      ro.disconnect();
+    };
+  }, []);
   if (!user || !role) return null;
   const browse = role !== "MAINTENANCE_STAFF";
   return (
@@ -38,6 +55,8 @@ export default function HomePage() {
       {role === "TENANT" && <TenantView />}
       {(role === "OWNER" || role === "ADMIN") && <ManagerView role={role} />}
       {role === "MAINTENANCE_STAFF" && <StaffView />}
+      <HomeStory role={role} />
+      <HomeCta role={role} />
     </div>
   );
 }

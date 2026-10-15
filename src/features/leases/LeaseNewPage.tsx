@@ -58,7 +58,8 @@ export default function LeaseNewPage() {
       notes: "",
     },
   });
-  const selected = units.data?.data.find((u) => u.id === watch("unitId"));
+  const unitList = units.data?.data ?? [];
+  const selected = unitList.find((u) => u.id === watch("unitId"));
 
   const onSubmit = handleSubmit(async (v) => {
     setFormError(null);
@@ -132,7 +133,7 @@ export default function LeaseNewPage() {
               {...register("unitId")}
             >
               <option value="">{t("leases.unitPick")}</option>
-              {units.data?.data.map((u) => (
+              {unitList.map((u) => (
                 <option
                   key={u.id}
                   value={u.id}

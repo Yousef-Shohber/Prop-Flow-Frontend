@@ -8,7 +8,7 @@ export function LogoMark({ className }: { className?: string }) {
       <path
         d="M7 15.5 16 8l9 7.5"
         fill="none"
-        stroke="var(--accent)"
+        stroke="var(--logo-roof)"
         strokeWidth="2.6"
         strokeLinecap="round"
         strokeLinejoin="round"

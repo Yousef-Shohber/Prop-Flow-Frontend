@@ -145,12 +145,19 @@ export async function getList<T>(
 ): Promise<Paginated<T>> {
   try {
     const res = (await api.get<ApiResponse<T[]>>(url, { params })).data;
+    // a list is always an array here; tolerate an envelope like { items: [...] } so one odd response cannot crash a page
+    const raw: unknown = res.data;
+    const rows: T[] = Array.isArray(raw)
+      ? raw
+      : ((["items", "data", "results", "rows"]
+          .map((k) => (raw as Record<string, unknown> | null)?.[k])
+          .find(Array.isArray) as T[] | undefined) ?? []);
     return {
-      data: res.data ?? [],
+      data: rows,
       meta: res.meta ?? {
         page: 1,
-        limit: res.data?.length ?? 0,
-        total: res.data?.length ?? 0,
+        limit: rows.length,
+        total: rows.length,
         totalPages: 1,
       },
     };
