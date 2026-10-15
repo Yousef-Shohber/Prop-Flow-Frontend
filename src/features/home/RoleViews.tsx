@@ -36,10 +36,12 @@ import {
 
 export function TenantView() {
   const { t, lang } = useI18n();
+
   const leases = useQuery({
     queryKey: ["leases", { status: "ACTIVE", page: 1, limit: 3, home: true }],
     queryFn: () => leasesApi.list({ status: "ACTIVE", page: 1, limit: 3 }),
   });
+
   const pending = useQuery({
     queryKey: [
       "rental-requests",
@@ -48,15 +50,19 @@ export function TenantView() {
     queryFn: () =>
       rentalRequestsApi.list({ status: "PENDING", page: 1, limit: 5 }),
   });
+
   const maint = useQuery({
     queryKey: ["maintenance", { page: 1, limit: 100, home: true }],
     queryFn: () => maintenanceApi.list({ page: 1, limit: 100 }),
   });
+
   const activeMaint = (maint.data?.data ?? []).filter((m: MaintenanceRequest) =>
     ["OPEN", "ASSIGNED", "IN_PROGRESS"].includes(m.status),
   );
+
   const myLeases: Lease[] = leases.data?.data ?? [];
   const reqs: RentalRequest[] = pending.data?.data ?? [];
+
   return (
     <>
       <div className="grid gap-3 sm:grid-cols-3">
@@ -68,6 +74,7 @@ export function TenantView() {
           loading={leases.isLoading}
           to={`${paths.leases}?status=ACTIVE`}
         />
+
         <Kpi
           icon={ClipboardList}
           tone="amber"
@@ -76,6 +83,7 @@ export function TenantView() {
           loading={pending.isLoading}
           to={`${paths.rentalRequests}?status=PENDING`}
         />
+
         <Kpi
           icon={Wrench}
           tone="blue"
@@ -85,6 +93,7 @@ export function TenantView() {
           to={paths.maintenance}
         />
       </div>
+
       <div className="grid items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
         <Panel
           title={t("home.myLease")}
@@ -115,6 +124,7 @@ export function TenantView() {
           <ul className="space-y-3">
             {myLeases.map((l) => {
               const left = daysLeft(l.endDate);
+
               return (
                 <li key={l.id}>
                   <Link
@@ -130,11 +140,14 @@ export function TenantView() {
                         {formatDate(l.endDate, lang)}
                       </span>
                     </span>
+
                     <span className="text-end">
                       <StatusBadge kind="lease" value={l.status} />
                       {left !== null && left >= 0 && (
                         <span className="mt-1 block text-xs text-muted">
-                          {t("home.daysLeft", { n: formatNumber(left, lang) })}
+                          {t("home.daysLeft", {
+                            n: formatNumber(left, lang),
+                          })}
                         </span>
                       )}
                     </span>
@@ -144,6 +157,7 @@ export function TenantView() {
             })}
           </ul>
         </Panel>
+
         <Panel
           title={t("home.myRequests")}
           to={paths.rentalRequests}
@@ -167,7 +181,9 @@ export function TenantView() {
               <Row
                 key={r.id}
                 to={paths.rentalRequest(r.id)}
-                title={t("units.unit", { n: r.unit?.unitNumber ?? "—" })}
+                title={t("units.unit", {
+                  n: r.unit?.unitNumber ?? "—",
+                })}
                 meta={`${formatDate(r.startDate, lang)} → ${formatDate(r.endDate, lang)}`}
                 end={<StatusBadge kind="rentalRequest" value={r.status} />}
               />
@@ -175,11 +191,17 @@ export function TenantView() {
           </ul>
         </Panel>
       </div>
+
       <div className="grid items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
         <Activity />
+
         <QuickActions
           items={[
-            { to: paths.properties, icon: Search, label: t("home.ctaTenant") },
+            {
+              to: paths.properties,
+              icon: Search,
+              label: t("home.ctaTenant"),
+            },
             {
               to: paths.maintenanceNew,
               icon: Wrench,
@@ -190,7 +212,11 @@ export function TenantView() {
               icon: ClipboardList,
               label: t("nav.rentalRequests"),
             },
-            { to: paths.renewals, icon: RefreshCw, label: t("nav.renewals") },
+            {
+              to: paths.renewals,
+              icon: RefreshCw,
+              label: t("nav.renewals"),
+            },
           ]}
         />
       </div>
@@ -200,10 +226,12 @@ export function TenantView() {
 
 export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
   const { t, lang } = useI18n();
+
   const stats = useQuery({
     queryKey: ["analytics", "dashboard"],
     queryFn: analyticsApi.dashboard,
   });
+
   const reqs = useQuery({
     queryKey: [
       "rental-requests",
@@ -212,6 +240,7 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
     queryFn: () =>
       rentalRequestsApi.list({ status: "PENDING", page: 1, limit: 4 }),
   });
+
   const renewals = useQuery({
     queryKey: [
       "lease-renewals",
@@ -219,6 +248,7 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
     ],
     queryFn: () => renewalsApi.list({ status: "PENDING", page: 1, limit: 4 }),
   });
+
   const openMaint = useQuery({
     queryKey: [
       "maintenance",
@@ -226,11 +256,14 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
     ],
     queryFn: () => maintenanceApi.list({ status: "OPEN", page: 1, limit: 4 }),
   });
+
   const attention =
     (reqs.data?.meta.total ?? 0) +
     (renewals.data?.meta.total ?? 0) +
     (openMaint.data?.meta.total ?? 0);
+
   const allLoaded = !!reqs.data && !!renewals.data && !!openMaint.data;
+
   return (
     <>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -243,6 +276,7 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
           loading={stats.isLoading}
           to={paths.dashboard}
         />
+
         <Kpi
           icon={ClipboardList}
           tone="amber"
@@ -251,6 +285,7 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
           loading={reqs.isLoading}
           to={`${paths.rentalRequests}?status=PENDING`}
         />
+
         <Kpi
           icon={RefreshCw}
           tone="teal"
@@ -259,6 +294,7 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
           loading={renewals.isLoading}
           to={paths.renewals}
         />
+
         <Kpi
           icon={Wrench}
           tone="orange"
@@ -268,7 +304,8 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
           to={`${paths.maintenance}?status=OPEN`}
         />
       </div>
-      <div className="grid items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
+
+      <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-2">
         <Panel
           title={t("home.attention")}
           loading={!allLoaded && !reqs.error}
@@ -294,6 +331,7 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
                 <h3 className="mb-1 text-xs font-semibold text-faint">
                   {t("nav.rentalRequests")}
                 </h3>
+
                 <ul className="-mx-2 divide-y divide-line">
                   {reqs.data!.data.map((r) => (
                     <Row
@@ -301,9 +339,13 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
                       to={paths.rentalRequest(r.id)}
                       title={
                         personName(r) ||
-                        t("units.unit", { n: r.unit?.unitNumber ?? "—" })
+                        t("units.unit", {
+                          n: r.unit?.unitNumber ?? "—",
+                        })
                       }
-                      meta={`${t("units.unit", { n: r.unit?.unitNumber ?? "—" })} · ${formatDate(r.startDate, lang)} → ${formatDate(r.endDate, lang)}`}
+                      meta={`${t("units.unit", {
+                        n: r.unit?.unitNumber ?? "—",
+                      })} · ${formatDate(r.startDate, lang)} → ${formatDate(r.endDate, lang)}`}
                       end={
                         <StatusBadge kind="rentalRequest" value={r.status} />
                       }
@@ -312,11 +354,13 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
                 </ul>
               </div>
             )}
+
             {(renewals.data?.data.length ?? 0) > 0 && (
               <div>
                 <h3 className="mb-1 text-xs font-semibold text-faint">
                   {t("nav.renewals")}
                 </h3>
+
                 <ul className="-mx-2 divide-y divide-line">
                   {renewals.data!.data.map((r) => (
                     <Row
@@ -325,9 +369,15 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
                       title={
                         r.tenant
                           ? fullName(r.tenant)
-                          : t("units.unit", { n: r.unit?.unitNumber ?? "—" })
+                          : t("units.unit", {
+                              n: r.unit?.unitNumber ?? "—",
+                            })
                       }
-                      meta={`${t("units.unit", { n: r.unit?.unitNumber ?? "—" })} · ${t("home.requestedUntil", { date: formatDate(r.requestedEndDate, lang) })}`}
+                      meta={`${t("units.unit", {
+                        n: r.unit?.unitNumber ?? "—",
+                      })} · ${t("home.requestedUntil", {
+                        date: formatDate(r.requestedEndDate, lang),
+                      })}`}
                       end={
                         <StatusBadge kind="rentalRequest" value={r.status} />
                       }
@@ -336,18 +386,22 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
                 </ul>
               </div>
             )}
+
             {(openMaint.data?.data.length ?? 0) > 0 && (
               <div>
                 <h3 className="mb-1 text-xs font-semibold text-faint">
                   {t("nav.maintenance")}
                 </h3>
+
                 <ul className="-mx-2 divide-y divide-line">
                   {openMaint.data!.data.map((m) => (
                     <Row
                       key={m.id}
                       to={paths.maintenanceItem(m.id)}
                       title={m.title}
-                      meta={t("units.unit", { n: m.unit?.unitNumber ?? "—" })}
+                      meta={t("units.unit", {
+                        n: m.unit?.unitNumber ?? "—",
+                      })}
                       end={<StatusBadge kind="priority" value={m.priority} />}
                     />
                   ))}
@@ -356,36 +410,42 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
             )}
           </div>
         </Panel>
-        <div className="space-y-5">
-          <QuickActions
-            items={[
-              {
-                to: paths.propertyNew,
-                icon: Plus,
-                label: t("dashboard.addProperty"),
-              },
-              {
-                to: paths.leaseNew,
-                icon: FileSignature,
-                label: t("home.newLease"),
-              },
-              {
-                to: paths.dashboard,
-                icon: LayoutDashboard,
-                label: t("nav.dashboard"),
-              },
-              { to: paths.units, icon: DoorOpen, label: t("nav.units") },
-              ...(role === "ADMIN"
-                ? [
-                    {
-                      to: `${paths.users}?role=OWNER`,
-                      icon: ShieldCheck,
-                      label: t("dashboard.pendingOwners"),
-                    },
-                  ]
-                : []),
-            ]}
-          />
+
+        <QuickActions
+          items={[
+            {
+              to: paths.propertyNew,
+              icon: Plus,
+              label: t("dashboard.addProperty"),
+            },
+            {
+              to: paths.leaseNew,
+              icon: FileSignature,
+              label: t("home.newLease"),
+            },
+            {
+              to: paths.dashboard,
+              icon: LayoutDashboard,
+              label: t("nav.dashboard"),
+            },
+            {
+              to: paths.units,
+              icon: DoorOpen,
+              label: t("nav.units"),
+            },
+            ...(role === "ADMIN"
+              ? [
+                  {
+                    to: `${paths.users}?role=OWNER`,
+                    icon: ShieldCheck,
+                    label: t("dashboard.pendingOwners"),
+                  },
+                ]
+              : []),
+          ]}
+        />
+
+        <div className="lg:col-span-2">
           <Activity />
         </div>
       </div>
@@ -395,6 +455,7 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
 
 export function StaffView() {
   const { t, lang } = useI18n();
+
   const assigned = useQuery({
     queryKey: [
       "maintenance",
@@ -403,6 +464,7 @@ export function StaffView() {
     queryFn: () =>
       maintenanceApi.list({ status: "ASSIGNED", page: 1, limit: 5 }),
   });
+
   const working = useQuery({
     queryKey: [
       "maintenance",
@@ -411,16 +473,20 @@ export function StaffView() {
     queryFn: () =>
       maintenanceApi.list({ status: "IN_PROGRESS", page: 1, limit: 5 }),
   });
+
   const jobs = (list?: MaintenanceRequest[]) =>
     (list ?? []).map((m) => (
       <Row
         key={m.id}
         to={paths.maintenanceItem(m.id)}
         title={m.title}
-        meta={`${t("units.unit", { n: m.unit?.unitNumber ?? "—" })}${m.scheduledDate ? ` · ${formatDate(m.scheduledDate, lang)}` : ""}`}
+        meta={`${t("units.unit", {
+          n: m.unit?.unitNumber ?? "—",
+        })}${m.scheduledDate ? ` · ${formatDate(m.scheduledDate, lang)}` : ""}`}
         end={<StatusBadge kind="priority" value={m.priority} />}
       />
     ));
+
   return (
     <>
       <div className="grid gap-3 sm:grid-cols-2">
@@ -432,6 +498,7 @@ export function StaffView() {
           loading={assigned.isLoading}
           to={`${paths.maintenance}?status=ASSIGNED`}
         />
+
         <Kpi
           icon={RefreshCw}
           tone="amber"
@@ -441,6 +508,7 @@ export function StaffView() {
           to={`${paths.maintenance}?status=IN_PROGRESS`}
         />
       </div>
+
       <div className="grid items-start gap-5 lg:grid-cols-2">
         <Panel
           title={t("home.readyToStart")}
@@ -464,6 +532,7 @@ export function StaffView() {
             {jobs(assigned.data?.data)}
           </ul>
         </Panel>
+
         <Panel
           title={t("home.inProgressNow")}
           to={`${paths.maintenance}?status=IN_PROGRESS`}
@@ -487,6 +556,7 @@ export function StaffView() {
           </ul>
         </Panel>
       </div>
+
       <Activity />
     </>
   );

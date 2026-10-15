@@ -216,11 +216,17 @@ export function QuickActions({
   items: { to: string; icon: LucideIcon; label: string }[];
 }) {
   const { t } = useI18n();
+
   return (
     <CardSection data-rise title={t("home.quick")}>
       <ul className="grid gap-2.5 sm:grid-cols-2">
-        {items.map((a) => (
-          <li key={a.to + a.label}>
+        {items.map((a, index) => (
+          <li
+            key={a.to + a.label}
+            className={
+              items.length === 5 && index === 4 ? "sm:col-span-2" : undefined
+            }
+          >
             <Link
               to={a.to}
               className="group flex items-center gap-3 rounded-control border border-line px-3.5 py-3 text-sm font-medium transition-all hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface-2 hover:shadow-soft"
