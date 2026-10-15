@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>PropFlow — إدارة العقارات والإيجارات في مكان واحد</title>
+  <meta name="description"
+    content="PropFlow منصة لإدارة العقارات والإيجارات: الوحدات، طلبات الإيجار، العقود، وطلبات الصيانة في تدفق واحد واضح للمستأجر والمالك وفريق الصيانة." />
+  <meta name="theme-color" content="#F3F4F1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0D1322" media="(prefers-color-scheme: dark)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="PropFlow — إدارة العقارات والإيجارات" />
+  <meta property="og:description" content="من البحث عن وحدة إلى توقيع العقد وطلبات الصيانة، كل شيء في تدفق واحد." />
+  <meta name="twitter:card" content="summary" />
+  <script>
+    (function () {
+      try {
+        var lang = localStorage.getItem("pf-lang") || "ar";
+        var theme = localStorage.getItem("pf-theme") || "system";
+        var d = document.documentElement;
+        d.lang = lang;
+        d.dir = lang === "ar" ? "rtl" : "ltr";
+        var dark =
+          theme === "dark" ||
+          (theme === "system" &&
+            matchMedia("(prefers-color-scheme: dark)").matches);
+        if (dark) d.classList.add("dark");
+      } catch (e) { }
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <noscript>يلزم تفعيل JavaScript لتشغيل PropFlow. · PropFlow requires
+    JavaScript.</noscript>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
