@@ -114,3 +114,24 @@ export const useAllTenants = (enabled = true) =>
     enabled,
     staleTime: 5 * 60_000,
   });
+
+/** Owner / admin: every technician (paged through GET /users/directory), so an assignedStaffId can be shown as a name. */
+export const useAllStaff = (enabled = true) =>
+  useQuery({
+    queryKey: ["users", "directory", "all-staff"],
+    queryFn: async () => {
+      const all: DirectoryUser[] = [];
+      for (let page = 1; page <= 20; page++) {
+        const r = await usersApi.directory({
+          role: "MAINTENANCE_STAFF",
+          page,
+          limit: 100,
+        });
+        all.push(...r.data);
+        if (page >= r.meta.totalPages) break;
+      }
+      return all;
+    },
+    enabled,
+    staleTime: 5 * 60_000,
+  });

@@ -20,13 +20,13 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { ErrorState, LoadingSkeleton } from "@/components/ui/States";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { UserPicker } from "@/components/ui/UserPicker";
-import { useInvalidate } from "@/hooks/queries";
+import { useAllStaff, useAllTenants, useInvalidate } from "@/hooks/queries";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/useToast";
 import { useEnumLabel, useI18n } from "@/i18n";
 import { todayISO } from "@/lib/dates";
 import { normalizeError } from "@/lib/errors";
-import { formatDate, formatDateTime } from "@/lib/format";
+import { formatDate, formatDateTime, fullName } from "@/lib/format";
 import { useSchemas } from "@/lib/schemas";
 import { useApiError } from "@/lib/useApiError";
 import { cn } from "@/lib/utils";
@@ -263,6 +263,9 @@ export default function MaintenanceDetailPage() {
   const label = useEnumLabel();
   const apiError = useApiError();
   const { user, role } = useAuth();
+  const isManager = role === "OWNER" || role === "ADMIN";
+  const tenants = useAllTenants(isManager);
+  const techs = useAllStaff(isManager);
   const qc = useQueryClient();
   const inv = useInvalidate();
   const q = useQuery({
@@ -320,13 +323,17 @@ export default function MaintenanceDetailPage() {
     role === "MAINTENANCE_STAFF" && m.assignedStaffId === user?.id; // never ADMIN/owner for start/complete
   const canWrite = ownTenant || manager;
 
+  const tenantName = fullName(tenants.data?.find((u) => u.id === m.tenantId));
+  const staffName = fullName(
+    techs.data?.find((u) => u.id === m.assignedStaffId),
+  );
   const actor = (changedById: string) =>
     changedById === user?.id
       ? t("mnt.actors.you")
       : changedById === m.tenantId
-        ? t("mnt.actors.tenant")
+        ? tenantName || t("mnt.actors.tenant")
         : changedById === m.assignedStaffId
-          ? t("mnt.actors.tech")
+          ? staffName || t("mnt.actors.tech")
           : t("mnt.actors.manager");
   const actions = (
     <>
@@ -489,9 +496,17 @@ export default function MaintenanceDetailPage() {
                   value: m.assignedStaffId
                     ? assignedStaff
                       ? t("mnt.assignedToYou")
-                      : t("mnt.assignedStaff")
+                      : staffName || t("mnt.assignedStaff")
                     : t("mnt.notAssigned"),
                 },
+                ...(manager
+                  ? [
+                      {
+                        label: t("mnt.actors.tenant"),
+                        value: tenantName || "—",
+                      },
+                    ]
+                  : []),
                 {
                   label: t("mnt.scheduled"),
                   value: (

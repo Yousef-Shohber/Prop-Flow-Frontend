@@ -16,12 +16,12 @@ import {
 import { PageHeader } from "@/components/ui/PageHeader";
 import { ErrorState, LoadingSkeleton } from "@/components/ui/States";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { useInvalidate } from "@/hooks/queries";
+import { useAllTenants, useInvalidate } from "@/hooks/queries";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/useToast";
 import { useI18n } from "@/i18n";
 import { isPast, todayISO, withinWindow, cmpDate } from "@/lib/dates";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatMoney, fullName } from "@/lib/format";
 import { useApiError } from "@/lib/useApiError";
 import { normalizeError } from "@/lib/errors";
 import { paths } from "@/routes/paths";
@@ -37,6 +37,7 @@ export default function LeaseDetailPage() {
   const { t, lang } = useI18n();
   const apiError = useApiError();
   const { role } = useAuth();
+  const tenants = useAllTenants(role !== "TENANT");
   const inv = useInvalidate();
   const manager = role === "OWNER" || role === "ADMIN";
   const q = useQuery({
@@ -288,6 +289,17 @@ export default function LeaseDetailPage() {
         <CardSection title={t("leases.dates")}>
           <DescriptionList
             items={[
+              ...(tenant
+                ? []
+                : [
+                    {
+                      label: t("leases.tenant"),
+                      value:
+                        fullName(
+                          tenants.data?.find((u) => u.id === l.tenantId),
+                        ) || "—",
+                    },
+                  ]),
               {
                 label: t("leases.start"),
                 value: <span className="num">{formatDate(start, lang)}</span>,
