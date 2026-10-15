@@ -1,7 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ScrollText, History } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { auditLogsApi } from "@/api/auditLogs";
+import { leasesApi } from "@/api/leases";
+import { maintenanceApi } from "@/api/maintenance";
+import { propertiesApi } from "@/api/properties";
+import { renewalsApi } from "@/api/renewals";
+import { rentalRequestsApi } from "@/api/rentalRequests";
+import { unitsApi } from "@/api/units";
 import { Button } from "@/components/ui/Button";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Dialog } from "@/components/ui/Dialog";
@@ -9,22 +15,89 @@ import { FilterBar, type FilterField } from "@/components/ui/FilterBar";
 import { Tag } from "@/components/ui/Misc";
 import { CountBadge, PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/States";
+import { useAllUsers } from "@/hooks/queries";
 import { useListParams } from "@/hooks/useListParams";
 import { useEnumLabel, useI18n } from "@/i18n";
-import { formatDateTime } from "@/lib/format";
+import { formatDateTime, fullName } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { AuditAction } from "@/types/enums";
 import type { AuditLog } from "@/types/models";
 
-export const ENTITY_SUGGESTIONS = [
+export const ENTITIES = [
   "Property",
   "Unit",
   "Lease",
   "RentalRequest",
+  "LeaseRenewalRequest",
   "MaintenanceRequest",
   "User",
 ];
-const shortId = (id?: string | null) => (id ? `#${id.slice(0, 8)}` : "—");
+
+/** Entities whose id can be resolved to a readable name (users come from the users list instead). */
+type Resolved = { text: string; unit?: boolean } | null;
+const ENTITY_LOOKUP: Record<string, (id: string) => Promise<Resolved>> = {
+  Property: async (id) => ({ text: (await propertiesApi.get(id)).name }),
+  Unit: async (id) => ({
+    text: (await unitsApi.get(id)).unitNumber,
+    unit: true,
+  }),
+  Lease: async (id) => ({
+    text: (await leasesApi.get(id)).unit.unitNumber,
+    unit: true,
+  }),
+  MaintenanceRequest: async (id) => ({
+    text: (await maintenanceApi.get(id)).title,
+  }),
+  RentalRequest: async (id) => {
+    const r = await rentalRequestsApi.get(id);
+    const tenant = fullName(r.tenant);
+    if (tenant) return { text: tenant };
+    return r.unit ? { text: r.unit.unitNumber, unit: true } : null;
+  },
+  LeaseRenewalRequest: async (id) => {
+    const r = await renewalsApi.get(id);
+    const tenant = fullName(r.tenant);
+    if (tenant) return { text: tenant };
+    return r.unit ? { text: r.unit.unitNumber, unit: true } : null;
+  },
+};
+const metaName = (m: AuditLog["metadata"]) => {
+  for (const k of ["name", "title"]) {
+    const v = m?.[k];
+    if (typeof v === "string") return v;
+  }
+  return "";
+};
+
+/** Shows the entity's name instead of its id; renders nothing while loading or when it can't be resolved (e.g. deleted). */
+function EntityName({
+  log,
+  userName,
+}: {
+  log: AuditLog;
+  userName: (id?: string | null) => string;
+}) {
+  const { t } = useI18n();
+  const lookup = ENTITY_LOOKUP[log.entity];
+  const q = useQuery({
+    queryKey: ["audit-logs", "entity-name", log.entity, log.entityId],
+    queryFn: () => lookup(log.entityId!),
+    enabled: !!log.entityId && !!lookup,
+    retry: false,
+    staleTime: 5 * 60_000,
+  });
+  let text = "";
+  if (log.entity === "User") text = userName(log.entityId);
+  else if (q.data)
+    text = q.data.unit ? t("units.unit", { n: q.data.text }) : q.data.text;
+  else if (q.isError) text = metaName(log.metadata);
+  if (!text) return null;
+  return (
+    <span className="min-w-0 truncate text-sm" dir="auto">
+      {text}
+    </span>
+  );
+}
 const isObj = (v: unknown): v is Record<string, unknown> =>
   !!v && typeof v === "object" && !Array.isArray(v);
 
@@ -111,6 +184,13 @@ export default function AuditLogsPage() {
     placeholderData: (p) => p,
   });
   const [open, setOpen] = useState<AuditLog | null>(null);
+  const users = useAllUsers();
+  const userMap = useMemo(
+    () => new Map((users.data ?? []).map((u) => [u.id, u])),
+    [users.data],
+  );
+  const userName = (id?: string | null) =>
+    id ? fullName(userMap.get(id)) : "";
 
   const fields: FilterField[] = [
     {
@@ -120,12 +200,18 @@ export default function AuditLogsPage() {
       options: AuditAction.map((v) => ({ value: v, label: label("audit", v) })),
     },
     {
-      type: "text",
+      type: "select",
       key: "entity",
       label: t("audit.entity"),
-      placeholder: ENTITY_SUGGESTIONS.join(" / "),
+      options: ENTITIES.map((v) => ({ value: v, label: ent(v) })),
     },
-    { type: "text", key: "userId", label: t("audit.userId") },
+    {
+      type: "user",
+      key: "userId",
+      label: t("audit.userId"),
+      users: users.data ?? [],
+      placeholder: t("audit.searchUser"),
+    },
   ];
   const columns: Column<AuditLog>[] = [
     {
@@ -141,14 +227,7 @@ export default function AuditLogsPage() {
     {
       key: "actor",
       header: t("audit.actor"),
-      cell: (l) => (
-        <span
-          className="num font-mono text-xs text-muted"
-          title={l.userId ?? ""}
-        >
-          {shortId(l.userId)}
-        </span>
-      ),
+      cell: (l) => <span className="text-sm">{userName(l.userId) || "—"}</span>,
     },
     {
       key: "action",
@@ -163,12 +242,7 @@ export default function AuditLogsPage() {
       cell: (l) => (
         <div className="flex items-center gap-2">
           <Tag>{ent(l.entity)}</Tag>
-          <span
-            className="num font-mono text-xs text-muted"
-            title={l.entityId ?? ""}
-          >
-            {shortId(l.entityId)}
-          </span>
+          <EntityName log={l} userName={userName} />
         </div>
       ),
     },
@@ -259,23 +333,14 @@ export default function AuditLogsPage() {
                 </dd>
               </div>
               <div className="col-span-2">
-                <dt className="text-xs text-faint">{t("audit.userId")}</dt>
-                <dd
-                  className="break-all font-mono text-xs"
-                  dir="ltr"
-                  style={{ textAlign: "start" }}
-                >
-                  {open.userId ?? "—"}
-                </dd>
+                <dt className="text-xs text-faint">{t("audit.actor")}</dt>
+                <dd className="text-sm">{userName(open.userId) || "—"}</dd>
               </div>
               <div className="col-span-2">
                 <dt className="text-xs text-faint">{t("audit.entity")}</dt>
-                <dd
-                  className="break-all font-mono text-xs"
-                  dir="ltr"
-                  style={{ textAlign: "start" }}
-                >
-                  {ent(open.entity)} · {open.entityId ?? "—"}
+                <dd className="flex items-center gap-2">
+                  <Tag>{ent(open.entity)}</Tag>
+                  <EntityName log={open} userName={userName} />
                 </dd>
               </div>
             </dl>

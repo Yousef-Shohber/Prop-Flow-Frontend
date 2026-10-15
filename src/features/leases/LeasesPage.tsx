@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { FileSignature, Plus, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leasesApi } from "@/api/leases";
@@ -9,10 +10,11 @@ import { Banner, Money } from "@/components/ui/Misc";
 import { CountBadge, PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/States";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { useAllTenants } from "@/hooks/queries";
 import { useAuth } from "@/hooks/useAuth";
 import { useListParams } from "@/hooks/useListParams";
 import { useEnumLabel, useI18n } from "@/i18n";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatMoney, fullName } from "@/lib/format";
 import { paths } from "@/routes/paths";
 import { LeaseStatus } from "@/types/enums";
 import type { Lease } from "@/types/models";
@@ -43,6 +45,11 @@ export default function LeasesPage() {
     queryFn: () => leasesApi.list(params),
     placeholderData: (p) => p,
   });
+  const tenants = useAllTenants(!tenant);
+  const tenantNames = useMemo(
+    () => new Map((tenants.data ?? []).map((u) => [u.id, fullName(u)])),
+    [tenants.data],
+  );
   const fields: FilterField[] = [
     {
       type: "select",
@@ -78,19 +85,22 @@ export default function LeasesPage() {
           {
             key: "tenant",
             header: t("leases.tenant"),
-            cell: (l: Lease) => (
-              <button
-                type="button"
-                className="num rounded-md bg-surface-2 px-2 py-0.5 font-mono text-xs text-muted hover:bg-surface-3"
-                title={l.tenantId}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  update({ filters: { tenantId: l.tenantId } });
-                }}
-              >
-                #{l.tenantId.slice(0, 8)}
-              </button>
-            ),
+            cell: (l: Lease) => {
+              const name = tenantNames.get(l.tenantId);
+              if (!name) return <span className="text-muted">—</span>;
+              return (
+                <button
+                  type="button"
+                  className="rounded-md px-1 py-0.5 text-start text-sm hover:bg-surface-2"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    update({ filters: { tenantId: l.tenantId } });
+                  }}
+                >
+                  {name}
+                </button>
+              );
+            },
           },
         ]
       : []),

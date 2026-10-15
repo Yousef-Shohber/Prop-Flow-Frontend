@@ -2,6 +2,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { propertiesApi } from "@/api/properties";
 import { rentalRequestsApi } from "@/api/rentalRequests";
 import { unitsApi } from "@/api/units";
+import { usersApi } from "@/api/users";
+import type { DirectoryUser, User } from "@/types/models";
 import { useAuth } from "./useAuth";
 
 /** Cached under ['properties', id] so every list can resolve names lazily (spec §21). */
@@ -74,3 +76,41 @@ export function useInvalidate() {
     me: () => qc.invalidateQueries({ queryKey: ["users", "me"] }),
   };
 }
+
+/** Admin only: every user (paged through GET /users), so ids can be shown as names and searched by name. */
+export const useAllUsers = (enabled = true) =>
+  useQuery({
+    queryKey: ["users", "all"],
+    queryFn: async () => {
+      const all: User[] = [];
+      for (let page = 1; page <= 20; page++) {
+        const r = await usersApi.list({ page, limit: 100 });
+        all.push(...r.data);
+        if (page >= r.meta.totalPages) break;
+      }
+      return all;
+    },
+    enabled,
+    staleTime: 5 * 60_000,
+  });
+
+/** Owner / admin: every tenant (paged through GET /users/directory), so a tenantId can be shown as a name. */
+export const useAllTenants = (enabled = true) =>
+  useQuery({
+    queryKey: ["users", "directory", "all-tenants"],
+    queryFn: async () => {
+      const all: DirectoryUser[] = [];
+      for (let page = 1; page <= 20; page++) {
+        const r = await usersApi.directory({
+          role: "TENANT",
+          page,
+          limit: 100,
+        });
+        all.push(...r.data);
+        if (page >= r.meta.totalPages) break;
+      }
+      return all;
+    },
+    enabled,
+    staleTime: 5 * 60_000,
+  });
