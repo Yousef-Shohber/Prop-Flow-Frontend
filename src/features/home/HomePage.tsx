@@ -4,9 +4,9 @@ import { DiscoverSection } from "@/features/discover/DiscoverSection";
 import { useAuth } from "@/hooks/useAuth";
 import { gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/motion";
 import { FeaturedUnits } from "./FeaturedUnits";
-import { HomeCta } from "./Homecta";
+import { HomeCta } from "./HomeCta";
 import { HomeHero } from "./HomeHero";
-import { HomeStory } from "./Homestory";
+import { HomeStory } from "./HomeStory";
 import { ManagerView, StaffView, TenantView } from "./RoleViews";
 
 /**
