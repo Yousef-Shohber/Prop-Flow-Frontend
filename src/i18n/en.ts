@@ -565,6 +565,19 @@ const en = {
       forgot: "Reset password",
     },
     heroTitle: "Every unit, lease and repair, in one place.",
+    floors: ["Every unit,", "every lease,", "every repair,"],
+    ground: "in one place.",
+    sample: {
+      lease: {
+        unit: "Unit 2A",
+        range: "Jun 2026 – Jun 2027",
+        status: "Active",
+      },
+      repair: {
+        title: "Bedroom AC not working",
+        steps: ["Pending", "In progress", "Done"],
+      },
+    },
     heroText:
       "PropFlow connects tenants, owners and maintenance teams in one clear flow, from the first rental request to the signed lease and the fixed leak.",
     ctaStart: "Create an account",
