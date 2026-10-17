@@ -37,7 +37,10 @@ export function makeSchemas(t: TFn) {
     .string()
     .trim()
     .regex(/^-?\d*$/, t("v.int"))
-    .refine((v) => v === "" || (Number(v) >= -2 && Number(v) <= 200), t("v.floor"))
+    .refine(
+      (v) => v === "" || (Number(v) >= -2 && Number(v) <= 200),
+      t("v.floor"),
+    )
     .optional()
     .or(z.literal(""));
   // backend: /^\+?[0-9 ()-]{7,20}$/

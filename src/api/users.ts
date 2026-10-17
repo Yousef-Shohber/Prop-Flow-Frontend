@@ -18,7 +18,8 @@ export const usersApi = {
     firstName?: string;
     lastName?: string;
     phone?: string | null;
-  }) => patch<User>("/users/me", b),
+  }) =>
+    patch<User>("/users/me", b),
   selectRole: (role: "TENANT" | "OWNER") =>
     patch<User>("/users/me/role", { role }),
   uploadAvatar: (file: File, onProgress?: (pct: number) => void) =>
