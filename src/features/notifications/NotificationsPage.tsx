@@ -17,6 +17,7 @@ import { unreadKey } from "@/components/layout/Sidebar";
 import { toast } from "@/hooks/useToast";
 import { useListParams } from "@/hooks/useListParams";
 import { useEnumLabel, useI18n } from "@/i18n";
+import { useApiError } from "@/lib/useApiError";
 import { formatRelative } from "@/lib/format";
 import { notificationTarget } from "./target";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,7 @@ export default function NotificationsPage() {
   const label = useEnumLabel();
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const apiError = useApiError();
   const { state, update } = useListParams({ limit: 20 });
   const unreadOnly = state.filters.unread === "true";
   const params = {
@@ -86,6 +88,7 @@ export default function NotificationsPage() {
       toast.success(t("notif.markedAll"));
       await qc.invalidateQueries({ queryKey: ["notifications"] });
     },
+    onError: (e) => toast.error(apiError(e)),
   });
 
   const open = (n: AppNotification) => {

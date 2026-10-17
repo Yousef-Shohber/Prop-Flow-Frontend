@@ -58,11 +58,11 @@ export function PublicFooter() {
   const t = useT();
   const { user } = useAuth();
   const col = "space-y-2.5 text-sm";
-  const link = "text-muted transition-colors hover:text-ink";
+  const link = "tap-area text-muted transition-colors hover:text-ink";
   const head = "mb-3 text-sm font-semibold";
   return (
     <footer className="border-t border-line bg-surface-2/40">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div className="mx-auto grid grid-cols-1 max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="max-w-xs">
           <Logo />
           <p className="mt-4 text-sm leading-relaxed text-muted">

@@ -36,7 +36,15 @@ function Page({
         className="flex flex-1 flex-col items-center justify-center px-6 pb-24 text-center"
       >
         <p
-          className="font-display text-[7rem] font-bold leading-none text-surface-3 sm:text-[10rem]"
+          className="font-display text-[7rem] font-bold leading-none sm:text-[10rem]"
+          style={{
+            // decorative numeral: a fading fill instead of low-contrast text
+            backgroundImage:
+              "linear-gradient(to bottom, var(--line-strong), transparent 85%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            color: "transparent",
+          }}
           aria-hidden
           dir="ltr"
         >

@@ -57,8 +57,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (e) {
       const err = normalizeError(e);
       setAccessToken(null);
-      // no response / 5xx on boot = we do not know; a 401 simply means "logged out"
-      if (err.status === 0 || err.status >= 500) setBootError(true);
+      // no response / 5xx / 429 on boot = we do not know (the /auth rate limit is 5 per minute, so a few quick
+      // reloads must not look like a logout); a 401 simply means "logged out"
+      if (err.status === 0 || err.status === 429 || err.status >= 500)
+        setBootError(true);
       setUser(null);
     } finally {
       setBooting(false);

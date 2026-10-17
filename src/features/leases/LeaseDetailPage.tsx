@@ -285,7 +285,7 @@ export default function LeaseDetailPage() {
         />
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         <CardSection title={t("leases.dates")}>
           <DescriptionList
             items={[
@@ -338,7 +338,7 @@ export default function LeaseDetailPage() {
             <div>
               <Link
                 to={paths.unit(l.unitId)}
-                className="text-sm font-medium underline underline-offset-4"
+                className="tap-area text-sm font-medium underline underline-offset-4"
               >
                 {t("leases.viewUnit")}
               </Link>

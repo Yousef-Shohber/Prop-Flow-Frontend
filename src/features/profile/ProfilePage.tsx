@@ -108,7 +108,11 @@ function ProfileForm({ user }: { user: User }) {
       const me = await usersApi.updateMe({
         firstName: v.firstName.trim(),
         lastName: v.lastName.trim(),
-        ...(v.phone?.trim() ? { phone: v.phone.trim() } : {}),
+        ...(v.phone?.trim()
+          ? { phone: v.phone.trim() }
+          : user.phone
+            ? { phone: null }
+            : {}),
       });
       qc.setQueryData(meKey, me);
       toast.success(t("profile.savedToast"));
@@ -125,7 +129,7 @@ function ProfileForm({ user }: { user: User }) {
   return (
     <form onSubmit={submit} noValidate className="space-y-4">
       {formError && <Banner tone="red">{formError}</Banner>}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Input
           label={t("profile.firstName")}
           error={errors.firstName?.message}
@@ -207,7 +211,7 @@ function PasswordForm() {
         error={errors.currentPassword?.message}
         {...register("currentPassword")}
       />
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <PasswordField
           label={t("profile.newPassword")}
           autoComplete="new-password"

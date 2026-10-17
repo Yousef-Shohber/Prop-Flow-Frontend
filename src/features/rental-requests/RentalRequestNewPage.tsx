@@ -57,16 +57,19 @@ export default function RentalRequestNewPage() {
 
   if (!unitId || unit.error)
     return (
-      <Card>
-        <EmptyState
-          icon={FileQuestion}
-          title={t("units.unavailable")}
-          description={t("units.unavailableText")}
-          action={
-            <Button to={paths.properties}>{t("rr.backToProperty")}</Button>
-          }
-        />
-      </Card>
+      <>
+        <PageHeader title={t("rr.new")} />
+        <Card>
+          <EmptyState
+            icon={FileQuestion}
+            title={t("units.unavailable")}
+            description={t("units.unavailableText")}
+            action={
+              <Button to={paths.properties}>{t("rr.backToProperty")}</Button>
+            }
+          />
+        </Card>
+      </>
     );
   if (unit.isLoading || existing.isLoading) return <LoadingSkeleton />;
   const u = unit.data!;
@@ -112,7 +115,7 @@ export default function RentalRequestNewPage() {
   return (
     <>
       <PageHeader title={t("rr.new")} />
-      <div className="mx-auto grid max-w-4xl gap-6 lg:grid-cols-[1fr_1.1fr]">
+      <div className="mx-auto grid grid-cols-1 max-w-4xl gap-6 lg:grid-cols-[1fr_1.1fr]">
         <Card className="h-fit overflow-hidden">
           {u.images[0] ? (
             <img
@@ -128,7 +131,7 @@ export default function RentalRequestNewPage() {
           <div className="space-y-2 p-5">
             <div className="flex items-baseline justify-between gap-3">
               <Link
-                className="text-lg font-semibold hover:underline"
+                className="tap-area text-lg font-semibold hover:underline"
                 to={paths.unit(u.id)}
               >
                 {t("units.unit", { n: u.unitNumber })}
@@ -166,7 +169,7 @@ export default function RentalRequestNewPage() {
               <Banner tone="blue">{t("rr.notReserved")}</Banner>
               {formError && <Banner tone="red">{formError}</Banner>}
               <CardSection title={t("rr.period")}>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <DateField
                     label={t("rr.start")}
                     error={errors.startDate?.message}

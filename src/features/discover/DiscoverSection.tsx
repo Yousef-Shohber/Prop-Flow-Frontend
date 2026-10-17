@@ -189,7 +189,7 @@ export function DiscoverSection({
       className={cn(
         "inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2",
         view === v
-          ? "bg-primary text-white"
+          ? "bg-primary text-on-primary"
           : "text-muted hover:bg-surface-2 hover:text-ink",
       )}
     >
@@ -362,7 +362,7 @@ export function DiscoverSection({
           <h2 className="mb-3 font-display text-xl font-semibold">
             {t("discover.browseByType")}
           </h2>
-          <ul className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 no-scrollbar sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 lg:grid-cols-6">
+          <ul className="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 no-scrollbar sm:mx-0 sm:scroll-px-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 lg:grid-cols-6">
             {PropertyType.map((v) => {
               const on = f.propertyType === v;
               const count = typeCounts.counts[v];
@@ -464,7 +464,7 @@ export function DiscoverSection({
                 q.isPlaceholderData && "opacity-60",
               )}
             >
-              <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {view === "units"
                   ? units.data?.data.map((u) => (
                       <li key={u.id}>
@@ -488,7 +488,7 @@ export function DiscoverSection({
               {meta && !active && meta.total > limit && (
                 <p className="mt-4 text-end text-sm">
                   <Link
-                    className="font-medium text-accent-ink hover:underline dark:text-accent"
+                    className="tap-area font-medium text-accent-ink hover:underline dark:text-accent"
                     to={view === "units" ? paths.units : paths.properties}
                   >
                     {t("home.seeAll")}

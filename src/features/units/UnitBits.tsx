@@ -31,7 +31,7 @@ export function PropertyLink({
     <Link
       to={paths.property(propertyId)}
       onClick={(e) => e.stopPropagation()}
-      className={`font-medium hover:underline ${className ?? ""}`}
+      className={`tap-area font-medium hover:underline ${className ?? ""}`}
     >
       {q.data.name}
     </Link>

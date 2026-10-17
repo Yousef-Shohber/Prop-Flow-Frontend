@@ -162,7 +162,7 @@ export default function UnitDetailPage() {
         </Banner>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_1fr]">
         <Gallery
           images={u.images}
           alt={t("units.unit", { n: u.unitNumber })}

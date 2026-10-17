@@ -136,10 +136,11 @@ function OccupancyRing({ d }: { d: DashboardStats }) {
         </dl>
       </div>
       {d.totalUnits > 0 && (
-        <div className="mt-auto" aria-hidden>
+        <div className="mt-auto">
           <div
             className="flex h-2.5 overflow-hidden rounded-full bg-surface-3"
             dir="ltr"
+            aria-hidden
           >
             {legend.map((x) => (
               <span
@@ -153,7 +154,7 @@ function OccupancyRing({ d }: { d: DashboardStats }) {
           </div>
           <Link
             to={paths.units}
-            className="mt-3 inline-block text-sm font-medium text-accent-ink hover:underline dark:text-accent"
+            className="tap-area mt-3 inline-block text-sm font-medium text-accent-ink hover:underline dark:text-accent"
           >
             {t("dashboard.viewUnits")}
           </Link>
@@ -245,7 +246,7 @@ function LeaseSplit({ active, expired }: { active: number; expired: number }) {
           />
         ))}
       </div>
-      <ul className="grid gap-3 sm:grid-cols-2">
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {rows.map((r) => (
           <li key={r.label}>
             <Link
@@ -268,7 +269,7 @@ function LeaseSplit({ active, expired }: { active: number; expired: number }) {
       </ul>
       <Link
         to={paths.leases}
-        className="mt-auto text-sm font-medium text-accent-ink hover:underline dark:text-accent"
+        className="tap-area mt-auto text-sm font-medium text-accent-ink hover:underline dark:text-accent"
       >
         {t("dashboard.viewLeases")}
       </Link>
@@ -470,7 +471,7 @@ export default function DashboardPage() {
       )}
       {d && (
         <div ref={grid} className="space-y-5">
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <Stat
               icon={Building2}
               tone="blue"
@@ -500,7 +501,7 @@ export default function DashboardPage() {
               to={`${paths.maintenance}?status=OPEN`}
             />
           </div>
-          <div className="grid items-stretch gap-5 lg:grid-cols-2">
+          <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-2">
             <CardSection
               data-stat
               title={t("dashboard.occupancy")}

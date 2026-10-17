@@ -32,12 +32,20 @@ export function makeSchemas(t: TFn) {
       .min(1, t("v.required"))
       .regex(/^\d+$/, t("v.whole"))
       .refine((v) => Number(v) >= min && Number(v) <= max, msg);
-  const optIntStr = z
+  // backend: @IsInt @Min(-2) @Max(200); empty means "not set"
+  const optFloor = z
     .string()
     .trim()
     .regex(/^-?\d*$/, t("v.int"))
+    .refine((v) => v === "" || (Number(v) >= -2 && Number(v) <= 200), t("v.floor"))
     .optional()
     .or(z.literal(""));
+  // backend: /^\+?[0-9 ()-]{7,20}$/
+  const phone = z
+    .string()
+    .trim()
+    .regex(/^(\+?[0-9 ()-]{7,20})?$/, t("v.phone"))
+    .optional();
   const date = z
     .string()
     .min(1, t("v.required"))
@@ -64,15 +72,11 @@ export function makeSchemas(t: TFn) {
 
   const unitFields = {
     unitNumber: req.max(50, t("v.max", { n: 50 })),
-    floor: optIntStr,
+    floor: optFloor,
     area: intStr(1, 9999, t("v.area")),
-    rentAmount: z
-      .string()
-      .trim()
-      .min(1, t("v.required"))
-      .regex(/^\d+$/, t("v.whole")),
-    bedrooms: intStr(0, 99, t("v.nonNeg")),
-    bathrooms: intStr(0, 99, t("v.nonNeg")),
+    rentAmount: intStr(0, 2_000_000_000, t("v.rent")),
+    bedrooms: intStr(0, 50, t("v.rooms")),
+    bathrooms: intStr(0, 50, t("v.rooms")),
     description: optional(2000),
   };
 
@@ -81,7 +85,7 @@ export function makeSchemas(t: TFn) {
     register: z.object({
       firstName: req.max(100, t("v.max", { n: 100 })),
       lastName: req.max(100, t("v.max", { n: 100 })),
-      phone: optional(30),
+      phone,
       email,
       password,
       role: z.enum(["TENANT", "OWNER"]),
@@ -112,7 +116,7 @@ export function makeSchemas(t: TFn) {
     profile: z.object({
       firstName: req.max(100, t("v.max", { n: 100 })),
       lastName: req.max(100, t("v.max", { n: 100 })),
-      phone: optional(30),
+      phone,
     }),
     property: z.object({
       name: req.max(150, t("v.max", { n: 150 })),

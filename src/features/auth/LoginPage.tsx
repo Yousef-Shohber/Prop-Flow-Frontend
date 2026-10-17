@@ -106,7 +106,7 @@ export default function LoginPage() {
           {t("auth.login.noAccount")}{" "}
           <Link
             to={paths.register}
-            className="font-semibold text-ink underline decoration-accent decoration-2 underline-offset-4"
+            className="tap-area font-semibold text-ink underline decoration-accent decoration-2 underline-offset-4"
           >
             {t("auth.login.create")}
           </Link>
@@ -170,7 +170,7 @@ export default function LoginPage() {
         <div className="flex justify-end -mt-2">
           <Link
             to={paths.forgotPassword}
-            className="text-sm font-medium text-muted underline-offset-4 hover:text-ink hover:underline"
+            className="tap-area text-sm font-medium text-muted underline-offset-4 hover:text-ink hover:underline"
           >
             {t("auth.login.forgot")}
           </Link>

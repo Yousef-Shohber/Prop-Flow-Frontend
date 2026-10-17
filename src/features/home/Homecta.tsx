@@ -53,7 +53,7 @@ export function HomeCta({ role }: { role: UserRole }) {
     <section
       ref={root}
       aria-labelledby="home-cta-title"
-      className="hero-navy grain relative isolate grid overflow-hidden rounded-sheet border border-white/10 text-white lg:grid-cols-2"
+      className="hero-navy grain relative isolate grid grid-cols-1 overflow-hidden rounded-sheet border border-white/10 text-white lg:grid-cols-2"
     >
       <div data-cta-copy className="px-6 py-10 sm:px-10 sm:py-14 lg:py-20">
         <h2

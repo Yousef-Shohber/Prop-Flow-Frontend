@@ -103,7 +103,7 @@ export default function RegisterPage() {
           {t("auth.register.have")}{" "}
           <Link
             to={paths.login}
-            className="font-semibold text-ink underline decoration-accent decoration-2 underline-offset-4"
+            className="tap-area font-semibold text-ink underline decoration-accent decoration-2 underline-offset-4"
           >
             {t("auth.register.signIn")}
           </Link>
@@ -162,7 +162,7 @@ export default function RegisterPage() {
             </fieldset>
           )}
         />
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
             label={t("auth.register.firstName")}
             autoComplete="given-name"

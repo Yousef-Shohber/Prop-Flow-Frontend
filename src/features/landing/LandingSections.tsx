@@ -68,7 +68,7 @@ export function SpacesSection() {
             {t("landing.spaces.intro")}
           </p>
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-4 sm:grid-rows-[repeat(3,minmax(0,13rem))]">
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:grid-rows-[repeat(3,minmax(0,13rem))]">
           {TILES.map((tile, i) => (
             <div
               key={tile.name}
@@ -137,7 +137,7 @@ export function FlowSection() {
             {t("landing.flow.intro")}
           </p>
         </div>
-        <ol className="mt-12 grid gap-px overflow-hidden rounded-card border border-line bg-line md:grid-cols-5">
+        <ol className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-card border border-line bg-line md:grid-cols-5">
           {steps.map(([title, text], i) => (
             <li
               key={title}
@@ -329,7 +329,7 @@ export function RolesSection() {
             <TabContent
               key={r}
               value={r}
-              className="grid items-start gap-10 outline-none lg:grid-cols-[1.1fr_0.9fr]"
+              className="grid grid-cols-1 items-start gap-10 outline-none lg:grid-cols-[1.1fr_0.9fr]"
             >
               <div>
                 <p className="max-w-lg text-lg text-muted">
@@ -369,7 +369,7 @@ export function TrustSection() {
   const items = raw<string[][]>("landing.trust.items");
   return (
     <section className="border-y border-line bg-surface-2/50 py-24">
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr]">
+      <div className="mx-auto grid grid-cols-1 max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <ShieldCheck
             data-reveal
@@ -383,7 +383,7 @@ export function TrustSection() {
             {t("landing.trust.intro")}
           </p>
         </div>
-        <dl className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2">
           {items.map(([title, text], i) => {
             const Icon = TRUST_ICONS[i] ?? ShieldCheck;
             return (
@@ -425,7 +425,7 @@ export function CtaLink() {
   return (
     <Link
       to={paths.register}
-      className="inline-flex items-center gap-1 font-medium underline"
+      className="tap-area inline-flex items-center gap-1 font-medium underline"
     >
       {t("landing.ctaStart")}
       <ArrowRight className="size-4 rtl:rotate-180" aria-hidden />

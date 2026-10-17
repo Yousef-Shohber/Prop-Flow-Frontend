@@ -44,7 +44,7 @@ export function BenefitsSection() {
             {t("landing.benefits.intro")}
           </p>
         </div>
-        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {items.map(([title, text], i) => {
             const Icon = BENEFIT_ICONS[i] ?? CheckCircle2;
             return (
@@ -160,7 +160,7 @@ function DashboardMock() {
     [Wrench, t("dashboard.openMaint")],
   ];
   return (
-    <div className="grid gap-3 sm:grid-cols-[1fr_1.1fr]">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_1.1fr]">
       <div className="grid grid-cols-2 gap-3">
         {stats.map(([Icon, text]) => (
           <div

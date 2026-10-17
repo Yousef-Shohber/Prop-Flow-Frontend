@@ -43,7 +43,7 @@ export function AuthLayout({
   );
 
   return (
-    <div className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
+    <div className="grid grid-cols-1 min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
       {/* Form */}
       <div className="flex flex-col px-5 py-5 sm:px-10">
         <div className="flex items-center justify-between">

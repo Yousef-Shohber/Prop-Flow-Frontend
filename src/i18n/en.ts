@@ -71,6 +71,7 @@ const en = {
     breadcrumbs: "Breadcrumbs",
     mainNav: "Main navigation",
     pagination: "Pagination",
+    openPhoto: "Open photo",
   },
   theme: { light: "Light", dark: "Dark", system: "System" },
   nav: {
@@ -904,6 +905,10 @@ const en = {
     ownerRequired: "Choose the owner",
     searchMax: "Search is limited to 150 characters",
     int: "Enter a whole number",
+    phone: "Enter a valid phone number (7 to 20 digits, e.g. +20 100 123 4567)",
+    rooms: "Enter a whole number from 0 to 50",
+    floor: "Floor must be a whole number from -2 to 200",
+    rent: "Rent must be a whole number up to 2,000,000,000",
   },
 
   uploader: {

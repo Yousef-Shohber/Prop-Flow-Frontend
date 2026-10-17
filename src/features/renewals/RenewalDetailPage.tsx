@@ -100,7 +100,7 @@ export default function RenewalDetailPage() {
           ) : null
         }
       />
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <CardSection>
           <DescriptionList
             items={[
@@ -146,7 +146,7 @@ export default function RenewalDetailPage() {
                 label: t("lrr.lease"),
                 value: (
                   <Link
-                    className="font-medium underline underline-offset-4"
+                    className="tap-area font-medium underline underline-offset-4"
                     to={paths.lease(r.leaseId)}
                   >
                     {t("lrr.viewLease")}

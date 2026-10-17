@@ -126,7 +126,7 @@ export function HomeStory({ role }: { role: UserRole }) {
             <li
               key={i}
               data-step
-              className="grid items-center gap-6 lg:grid-cols-2 lg:gap-16"
+              className="grid grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-16"
             >
               <div
                 data-frame
@@ -148,7 +148,15 @@ export function HomeStory({ role }: { role: UserRole }) {
               <div data-copy className="min-w-0">
                 <span
                   aria-hidden
-                  className="num block font-display text-6xl font-bold leading-none text-accent/30 sm:text-7xl"
+                  className="num block font-display text-6xl font-bold leading-none sm:text-7xl"
+                  style={{
+                    // decorative step number: fading fill rather than low-contrast text
+                    backgroundImage:
+                      "linear-gradient(to bottom, color-mix(in srgb, var(--accent) 45%, transparent), transparent 90%)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    color: "transparent",
+                  }}
                 >
                   0{i + 1}
                 </span>

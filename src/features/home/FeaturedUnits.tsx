@@ -63,7 +63,7 @@ export function FeaturedUnits({ role }: { role: UserRole }) {
         </div>
         <Link
           to={paths.units}
-          className="inline-flex items-center gap-1 text-sm font-medium text-accent-ink hover:underline dark:text-accent"
+          className="tap-area inline-flex items-center gap-1 text-sm font-medium text-accent-ink hover:underline dark:text-accent"
         >
           {t("home.seeAllUnits")}
           <ArrowRight className="size-3.5 rtl:rotate-180" aria-hidden />
@@ -73,7 +73,7 @@ export function FeaturedUnits({ role }: { role: UserRole }) {
         <div
           role="status"
           aria-label={t("common.loading")}
-          className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4"
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4"
         >
           {[0, 1, 2, 3].map((i) => (
             <div key={i} className="skeleton aspect-[4/3] rounded-card" />
@@ -93,7 +93,7 @@ export function FeaturedUnits({ role }: { role: UserRole }) {
           />
         </Card>
       ) : (
-        <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {units.map((u) => (
             <li key={u.id}>
               <UnitCard unit={u} pending={pending} />

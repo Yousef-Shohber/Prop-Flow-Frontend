@@ -5,8 +5,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------- Design tokens ----------
-   Light: cool limestone paper + deep navy ink, saffron as the single warm accent.
-   Dark : deep blue slate (not black) with saffron promoted to the primary action colour. */
+    Light: cool limestone paper + deep navy ink, saffron as the single warm accent.
+    Dark : deep blue slate (not black) with saffron promoted to the primary action colour. */
 :root {
   --bg: #f3f4f1;
   --surface: #ffffff;
@@ -16,7 +16,7 @@
   --line-strong: #c3c9be;
   --text: #17202e;
   --text-muted: #566074;
-  --text-faint: #7b8496;
+  --text-faint: #5c6679;
   --primary: #1d2b5f;
   --primary-hover: #26387a;
   --on-primary: #ffffff;
@@ -62,7 +62,7 @@
   --line-strong: #37446f;
   --text: #e8ecf6;
   --text-muted: #a3adc7;
-  --text-faint: #7983a0;
+  --text-faint: #8d97b3;
   --primary: #f0b04a;
   --primary-hover: #f6c066;
   --on-primary: #1b1405;
@@ -129,6 +129,16 @@
   --shadow-card: var(--shadow-md);
   --shadow-pop: var(--shadow-lg);
   --shadow-soft: var(--shadow-sm);
+}
+
+/* Grows the clickable area of small text links (WCAG 2.2 target size) without moving anything. */
+@utility tap-area {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem -0.25rem;
+  }
 }
 
 @layer base {

@@ -176,7 +176,7 @@ export default function RentalRequestDetailPage() {
         )}
       </Banner>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <CardSection title={t("rr.period")}>
           <DescriptionList
             items={[
@@ -241,7 +241,7 @@ export default function RentalRequestDetailPage() {
               <span className="font-medium">{unitLabel}</span>
               {r.unit && unitLinkable && (
                 <Link
-                  className="text-sm font-medium underline underline-offset-4"
+                  className="tap-area text-sm font-medium underline underline-offset-4"
                   to={paths.unit(r.unit.id)}
                 >
                   {t("common.view")}

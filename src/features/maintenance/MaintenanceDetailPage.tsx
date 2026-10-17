@@ -23,7 +23,7 @@ import { UserPicker } from "@/components/ui/UserPicker";
 import { useAllStaff, useAllTenants, useInvalidate } from "@/hooks/queries";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/useToast";
-import { useEnumLabel, useI18n } from "@/i18n";
+import { useEnumLabel, useI18n, useT } from "@/i18n";
 import { todayISO } from "@/lib/dates";
 import { normalizeError } from "@/lib/errors";
 import { formatDate, formatDateTime, fullName } from "@/lib/format";
@@ -47,14 +47,20 @@ function PhotoGrid({
   onRemove?: (id: string) => void;
   label: string;
 }) {
+  const t = useT();
   return (
     <ul className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
-      {images.map((img) => (
+      {images.map((img, i) => (
         <li
           key={img.publicId}
           className="group relative aspect-square overflow-hidden rounded-xl bg-surface-2"
         >
-          <a href={img.url} target="_blank" rel="noreferrer">
+          <a
+            href={img.url}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`${t("a11y.openPhoto")} ${i + 1}`}
+          >
             <img
               src={img.url}
               alt=""
@@ -403,7 +409,7 @@ export default function MaintenanceDetailPage() {
         </Banner>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         <div className="space-y-6">
           <CardSection title={t("mnt.description")}>
             <p className="whitespace-pre-line text-sm leading-relaxed">

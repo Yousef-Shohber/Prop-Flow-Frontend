@@ -73,7 +73,7 @@ export function LandingHeader() {
             <a
               key={l.href}
               href={l.href}
-              className="transition-colors hover:text-ink"
+              className="tap-area transition-colors hover:text-ink"
             >
               {t(l.key)}
             </a>

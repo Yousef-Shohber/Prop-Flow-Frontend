@@ -49,6 +49,8 @@ export function DataTable<T>(p: DataTableProps<T>) {
     });
   };
   const onKey = (e: KeyboardEvent, row: T) => {
+    // ignore keys pressed on buttons/links nested inside the row
+    if (e.target !== e.currentTarget) return;
     if (p.onRowClick && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       p.onRowClick(row);
@@ -94,7 +96,7 @@ export function DataTable<T>(p: DataTableProps<T>) {
                             type="button"
                             onClick={() => sortOn(c.sortKey!)}
                             aria-label={`${t("a11y.sort")}: ${typeof c.header === "string" ? c.header : c.key}`}
-                            className="-mx-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 hover:bg-surface-3 hover:text-ink"
+                            className="tap-area -mx-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 hover:bg-surface-3 hover:text-ink"
                           >
                             {c.header}
                             {active ? (
@@ -154,9 +156,12 @@ export function DataTable<T>(p: DataTableProps<T>) {
                   key={p.rowKey(row)}
                   data-testid="mobile-card"
                   onClick={p.onRowClick ? () => p.onRowClick!(row) : undefined}
+                  onKeyDown={(e) => onKey(e, row)}
+                  tabIndex={p.onRowClick ? 0 : undefined}
                   className={cn(
                     "p-4",
-                    p.onRowClick && "cursor-pointer active:bg-surface-2",
+                    p.onRowClick &&
+                      "cursor-pointer active:bg-surface-2 focus-visible:bg-surface-2 focus-visible:outline-2 focus-visible:-outline-offset-2",
                   )}
                 >
                   {p.mobileCard!(row)}

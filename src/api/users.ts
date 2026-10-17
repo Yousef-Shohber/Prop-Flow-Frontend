@@ -14,8 +14,11 @@ import type { ListParams } from "@/types/api";
 
 export const usersApi = {
   me: () => get<User>("/users/me"),
-  updateMe: (b: { firstName?: string; lastName?: string; phone?: string }) =>
-    patch<User>("/users/me", b),
+  updateMe: (b: {
+    firstName?: string;
+    lastName?: string;
+    phone?: string | null;
+  }) => patch<User>("/users/me", b),
   selectRole: (role: "TENANT" | "OWNER") =>
     patch<User>("/users/me/role", { role }),
   uploadAvatar: (file: File, onProgress?: (pct: number) => void) =>

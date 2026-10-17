@@ -173,7 +173,7 @@ export default function PropertyDetailPage() {
         </p>
       )}
       {!manager ? (
-        <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.2fr_1fr]">
           <div className="space-y-6">
             <Gallery
               images={p.images}
@@ -199,7 +199,7 @@ export default function PropertyDetailPage() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-baseline justify-between gap-2">
                           <a
-                            className="font-semibold hover:underline"
+                            className="tap-area font-semibold hover:underline"
                             href={paths.unit(u.id)}
                             onClick={(e) => {
                               e.preventDefault();
@@ -240,7 +240,7 @@ export default function PropertyDetailPage() {
             </TabTrigger>
           </TabList>
           <TabContent value="details" className="space-y-6">
-            <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_1fr]">
               <Gallery
                 images={p.images}
                 alt={p.name}

@@ -42,7 +42,7 @@ export default function LegalPage({ kind }: { kind: "terms" | "privacy" }) {
           ))}
         </div>
         <p className="mt-10 text-sm">
-          <Link to="/" className="font-medium underline underline-offset-4">
+          <Link to="/" className="tap-area font-medium underline underline-offset-4">
             {t("nav.dashboard")}
           </Link>
         </p>

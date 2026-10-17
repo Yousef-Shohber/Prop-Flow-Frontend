@@ -214,7 +214,7 @@ export function LoadingSkeleton({
         </div>
       )}
       {variant === "cards" && (
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: rows }).map((_, i) => (
             <div
               key={i}
@@ -232,12 +232,12 @@ export function LoadingSkeleton({
       )}
       {variant === "stats" && (
         <div className="space-y-5">
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className="skeleton h-[5.5rem] rounded-card" />
             ))}
           </div>
-          <div className="grid gap-5 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <div className="skeleton h-72 rounded-card" />
             <div className="skeleton h-72 rounded-card" />
           </div>
@@ -260,7 +260,7 @@ export function LoadingSkeleton({
       {variant === "detail" && (
         <div className="space-y-5">
           <div className="skeleton h-64 rounded-card" />
-          <div className="grid gap-5 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             <div className="skeleton h-40 rounded-card md:col-span-2" />
             <div className="skeleton h-40 rounded-card" />
           </div>

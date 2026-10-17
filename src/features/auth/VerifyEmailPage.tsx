@@ -112,7 +112,7 @@ export default function VerifyEmailPage() {
       footer={
         <Link
           to={paths.login}
-          className="font-semibold text-ink underline decoration-accent decoration-2 underline-offset-4"
+          className="tap-area font-semibold text-ink underline decoration-accent decoration-2 underline-offset-4"
         >
           {t("auth.verify.back")}
         </Link>

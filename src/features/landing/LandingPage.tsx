@@ -190,7 +190,7 @@ export default function LandingPage() {
             aria-hidden
             className="absolute inset-x-0 top-0 -z-10 h-[46rem] bg-[radial-gradient(60%_50%_at_75%_30%,var(--accent-soft),transparent_70%)] opacity-80 rtl:[background-position:left]"
           />
-          <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:pb-28">
+          <div className="mx-auto grid grid-cols-1 max-w-6xl items-center gap-12 px-4 pb-20 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:pb-28">
             <div>
               <p
                 data-hero-fade
@@ -290,7 +290,7 @@ export default function LandingPage() {
 
         {/* ---------- features ---------- */}
         <section id="features" className="py-24">
-          <div className="mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="mx-auto grid grid-cols-1 max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="lg:sticky lg:top-24 lg:self-start">
               <h2 data-reveal className="text-3xl font-bold sm:text-4xl">
                 {t("landing.featuresTitle")}
@@ -329,7 +329,7 @@ export default function LandingPage() {
             <h2 data-reveal className="text-3xl font-bold sm:text-4xl">
               {t("landing.howTitle")}
             </h2>
-            <div className="mt-12 grid gap-14 md:grid-cols-2">
+            <div className="mt-12 grid grid-cols-1 gap-14 md:grid-cols-2">
               {[
                 { title: t("landing.howTenant"), steps: tenantSteps },
                 { title: t("landing.howOwner"), steps: ownerSteps },

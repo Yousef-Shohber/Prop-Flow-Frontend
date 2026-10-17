@@ -65,7 +65,7 @@ export function TenantView() {
 
   return (
     <>
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <Kpi
           icon={FileSignature}
           tone="green"
@@ -94,7 +94,7 @@ export function TenantView() {
         />
       </div>
 
-      <div className="grid items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
         <Panel
           title={t("home.myLease")}
           to={paths.leases}
@@ -192,7 +192,7 @@ export function TenantView() {
         </Panel>
       </div>
 
-      <div className="grid items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
         <Activity />
 
         <QuickActions
@@ -266,7 +266,7 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
 
   return (
     <>
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi
           icon={Building2}
           tone="blue"
@@ -489,7 +489,7 @@ export function StaffView() {
 
   return (
     <>
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Kpi
           icon={Wrench}
           tone="blue"
@@ -509,7 +509,7 @@ export function StaffView() {
         />
       </div>
 
-      <div className="grid items-start gap-5 lg:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
         <Panel
           title={t("home.readyToStart")}
           to={`${paths.maintenance}?status=ASSIGNED`}

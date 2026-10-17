@@ -209,7 +209,7 @@ export default function PropertyFormPage() {
       >
         {formError && <Banner tone="red">{formError}</Banner>}
         <CardSection title={t("properties.tabDetails")}>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {role === "ADMIN" && !editing && (
               <Select
                 wrapperClassName="sm:col-span-2"

@@ -60,7 +60,7 @@ export default function ChooseRolePage() {
     <AuthLayout title={t("auth.role.title")} subtitle={t("auth.role.subtitle")}>
       <div className="space-y-5">
         <div
-          className="grid gap-3 sm:grid-cols-2"
+          className="grid grid-cols-1 gap-3 sm:grid-cols-2"
           role="radiogroup"
           aria-label={t("auth.role.title")}
         >

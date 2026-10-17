@@ -127,7 +127,7 @@ export function Panel({
         to && linkLabel ? (
           <Link
             to={to}
-            className="inline-flex items-center gap-1 text-sm font-medium text-accent-ink hover:underline dark:text-accent"
+            className="tap-area inline-flex items-center gap-1 text-sm font-medium text-accent-ink hover:underline dark:text-accent"
           >
             {linkLabel}
             <ArrowRight className="size-3.5 rtl:rotate-180" aria-hidden />
@@ -219,7 +219,7 @@ export function QuickActions({
 
   return (
     <CardSection data-rise title={t("home.quick")}>
-      <ul className="grid gap-2.5 sm:grid-cols-2">
+      <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
         {items.map((a, index) => (
           <li
             key={a.to + a.label}
