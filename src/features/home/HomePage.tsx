@@ -11,7 +11,7 @@ import { ManagerView, StaffView, TenantView } from "./RoleViews";
 
 /**
  * Authenticated discovery landing page (/home): hero with live catalogue numbers, search (state in the URL),
- * browse-by-type tiles with real counts, newest properties, available units, and the role's own insights.
+ * browse-by-type tiles with real counts, newest properties, available units, and the role's own insights. 
  */
 export default function HomePage() {
   const { user, role } = useAuth();
