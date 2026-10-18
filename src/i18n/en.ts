@@ -1088,6 +1088,7 @@ const en = {
     pendingRequest: "You already have a pending request for this unit",
     viewRequest: "View your request",
     images: "Unit photos",
+    propertyPhotos: "This unit has no photos yet, showing the property photos.",
     noUnits: "No units yet",
     noUnitsText: "Units appear here once an owner adds them.",
     allProperties: "All properties",

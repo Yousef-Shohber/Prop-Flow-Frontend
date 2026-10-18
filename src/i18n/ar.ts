@@ -1045,6 +1045,7 @@ const ar: Dict = {
     pendingRequest: "لديك طلب معلّق لهذه الوحدة",
     viewRequest: "عرض طلبك",
     images: "صور الوحدة",
+    propertyPhotos: "لا توجد صور لهذه الوحدة بعد، يتم عرض صور العقار.",
     noUnits: "لا توجد وحدات بعد",
     noUnitsText: "تظهر الوحدات هنا عندما يضيفها المالك.",
     allProperties: "كل العقارات",

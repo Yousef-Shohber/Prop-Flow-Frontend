@@ -67,16 +67,28 @@ export function UnitSpecs({
   );
 }
 
+/**
+ * A unit with no photos of its own shows its property's photos instead. The property comes from the shared
+ * ['properties', id] cache (the same one PropertyLink uses), and is only requested when the unit has no photos.
+ */
+export function useUnitImages(unit?: Pick<Unit, "images" | "propertyId">) {
+  const own = !unit || unit.images.length > 0;
+  const property = useProperty(unit?.propertyId, !own);
+  const images = !unit ? [] : own ? unit.images : (property.data?.images ?? []);
+  return { images, inherited: !own && images.length > 0 };
+}
+
 export function UnitThumb({
   unit,
   className = "size-11 rounded-lg",
 }: {
-  unit: Pick<Unit, "images">;
+  unit: Pick<Unit, "images" | "propertyId">;
   className?: string;
 }) {
-  return unit.images[0] ? (
+  const { images } = useUnitImages(unit);
+  return images[0] ? (
     <img
-      src={unit.images[0].url}
+      src={images[0].url}
       alt=""
       loading="lazy"
       className={`${className} object-cover`}
@@ -134,6 +146,7 @@ export function UnitCard({
 }) {
   const { t, lang } = useI18n();
   const state = useFromState();
+  const { images } = useUnitImages(unit);
   return (
     <div
       className={cn(
@@ -150,7 +163,7 @@ export function UnitCard({
       >
         <div className="relative aspect-[16/10] overflow-hidden bg-surface-2">
           <Photo
-            src={unit.images[0]?.url}
+            src={images[0]?.url}
             variant="interior"
             alt=""
             overlay

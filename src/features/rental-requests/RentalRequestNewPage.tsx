@@ -18,7 +18,12 @@ import { formatMoney } from "@/lib/format";
 import { useSchemas } from "@/lib/schemas";
 import { useApiError } from "@/lib/useApiError";
 import { paths } from "@/routes/paths";
-import { UnitSpecs, UnitThumb, PropertyLink } from "../units/UnitBits";
+import {
+  UnitSpecs,
+  UnitThumb,
+  PropertyLink,
+  useUnitImages,
+} from "../units/UnitBits";
 import { FileQuestion } from "lucide-react";
 
 interface Values {
@@ -36,6 +41,7 @@ export default function RentalRequestNewPage() {
   const navigate = useNavigate();
   const inv = useInvalidate();
   const unit = useUnit(unitId, !!unitId);
+  const unitImages = useUnitImages(unit.data);
   const existing = useQuery({
     queryKey: ["rental-requests", "pending-for-unit", unitId],
     queryFn: () =>
@@ -117,9 +123,9 @@ export default function RentalRequestNewPage() {
       <PageHeader title={t("rr.new")} />
       <div className="mx-auto grid grid-cols-1 max-w-4xl gap-6 lg:grid-cols-[1fr_1.1fr]">
         <Card className="h-fit overflow-hidden">
-          {u.images[0] ? (
+          {unitImages.images[0] ? (
             <img
-              src={u.images[0].url}
+              src={unitImages.images[0].url}
               alt=""
               className="aspect-[16/10] w-full object-cover"
             />

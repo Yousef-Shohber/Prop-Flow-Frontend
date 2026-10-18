@@ -26,7 +26,7 @@ import { formatDate, formatMoney, formatNumber } from "@/lib/format";
 import { useApiError } from "@/lib/useApiError";
 import { paths } from "@/routes/paths";
 import { Gallery } from "../properties/Gallery";
-import { PropertyLink, RentCta } from "./UnitBits";
+import { PropertyLink, RentCta, useUnitImages } from "./UnitBits";
 import type { Unit } from "@/types/models";
 
 export default function UnitDetailPage() {
@@ -39,6 +39,7 @@ export default function UnitDetailPage() {
   const inv = useInvalidate();
   const manager = role === "OWNER" || role === "ADMIN";
   const q = useUnit(id);
+  const gallery = useUnitImages(q.data);
   const pending = usePendingRequestMap();
   const [confirm, setConfirm] = useState(false);
 
@@ -163,11 +164,18 @@ export default function UnitDetailPage() {
       )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_1fr]">
-        <Gallery
-          images={u.images}
-          alt={t("units.unit", { n: u.unitNumber })}
-          variant="interior"
-        />
+        <div className="min-w-0">
+          <Gallery
+            images={gallery.images}
+            alt={t("units.unit", { n: u.unitNumber })}
+            variant="interior"
+          />
+          {gallery.inherited && (
+            <p className="mt-2 text-xs text-muted">
+              {t("units.propertyPhotos")}
+            </p>
+          )}
+        </div>
         <div className="space-y-6">
           <CardSection>
             <p className="mb-4">
