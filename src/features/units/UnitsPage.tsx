@@ -4,6 +4,9 @@ import { propertiesApi } from "@/api/properties";
 import { unitsApi } from "@/api/units";
 import { Card } from "@/components/ui/Misc";
 import { FilterBar, type FilterField } from "@/components/ui/FilterBar";
+import { ExportButton } from "@/components/ui/ExportButton";
+import { fetchAll } from "@/lib/fetchAll";
+import { loadPropertyNames } from "@/lib/exportHelpers";
 import { CountBadge, PageHeader } from "@/components/ui/PageHeader";
 import { Pagination } from "@/components/ui/Pagination";
 import { Select } from "@/components/ui/Field";
@@ -123,6 +126,44 @@ export default function UnitsPage() {
         badge={<CountBadge n={q.data?.meta.total} />}
         title={t("units.title")}
         subtitle={isTenant ? t("units.subTenant") : t("units.subOwner")}
+        actions={
+          <ExportButton
+            name="units"
+            disabled={!q.data?.meta.total}
+            load={async () => {
+              const { page: _p, limit: _l, ...filters } = params;
+              const [{ rows, truncated }, names] = await Promise.all([
+                fetchAll((page, limit) =>
+                  unitsApi.list({ ...filters, page, limit }),
+                ),
+                loadPropertyNames(),
+              ]);
+              return {
+                truncated,
+                headers: [
+                  t("export.col.unit"),
+                  t("export.col.property"),
+                  t("export.col.floor"),
+                  t("export.col.area"),
+                  t("export.col.bedrooms"),
+                  t("export.col.bathrooms"),
+                  t("export.col.rent"),
+                  t("export.col.status"),
+                ],
+                rows: rows.map((u) => [
+                  u.unitNumber,
+                  names.get(u.propertyId) ?? "",
+                  u.floor,
+                  u.area,
+                  u.bedrooms,
+                  u.bathrooms,
+                  u.rentAmount,
+                  label("unit", u.status),
+                ]),
+              };
+            }}
+          />
+        }
       />
       <div className="mb-5 space-y-4">
         <FilterBar

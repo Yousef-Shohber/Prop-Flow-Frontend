@@ -59,6 +59,13 @@ const Notifications = L(
 const Profile = L(() => import("@/features/profile/ProfilePage"));
 const Users = L(() => import("@/features/users/UsersPage"));
 const AuditLogs = L(() => import("@/features/audit-logs/AuditLogsPage"));
+const Contract = L(() => import("@/features/contract/ContractPage"));
+const Timeline = L(() => import("@/features/timeline/TimelinePage"));
+const RentRoll = L(() => import("@/features/reports/RentRollPage"));
+const Help = L(() => import("@/features/help/HelpPage"));
+const HelpGate = lazy(() =>
+  import("@/features/help/HelpPage").then((m) => ({ default: m.HelpGate })),
+);
 const NotFound = L(() =>
   import("@/features/misc/StatusPages").then((m) => ({
     default: m.NotFoundPage,
@@ -101,6 +108,9 @@ export default function App() {
         <Route path={paths.resetPassword} element={<Reset />} />
         <Route path={paths.terms} element={<Legal kind="terms" />} />
         <Route path={paths.privacy} element={<Legal kind="privacy" />} />
+        <Route path={paths.help} element={<HelpGate />}>
+          <Route index element={<Help />} />
+        </Route>
         <Route element={<RequireSessionOnly />}>
           <Route path={paths.chooseRole} element={<ChooseRole />} />
         </Route>
@@ -119,6 +129,8 @@ export default function App() {
               <Route path="/units/:id/edit" element={<UnitForm />} />
               <Route path="/leases/new" element={<LeaseNew />} />
               <Route path="/leases/:id/edit" element={<LeaseEdit />} />
+              <Route path={paths.timeline} element={<Timeline />} />
+              <Route path={paths.rentRoll} element={<RentRoll />} />
             </Route>
             <Route element={<RequireRole roles={ALL} />}>
               <Route path={paths.properties} element={<Properties />} />
@@ -132,6 +144,7 @@ export default function App() {
               />
               <Route path={paths.leases} element={<Leases />} />
               <Route path="/leases/:id" element={<LeaseDetail />} />
+              <Route path="/leases/:id/contract" element={<Contract />} />
               <Route path={paths.renewals} element={<Renewals />} />
               <Route
                 path="/lease-renewal-requests/:id"

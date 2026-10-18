@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { consumeGoogleReturn, markGoogleStart } from "@/lib/googleFlow";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Banner } from "@/components/ui/Misc";
@@ -28,6 +29,7 @@ export function GoogleButton() {
       size="lg"
       className="w-full"
       onClick={() => {
+        markGoogleStart();
         window.location.href = `${env.apiBase}/auth/google`;
       }}
       icon={
@@ -65,6 +67,7 @@ export default function LoginPage() {
   const loc = useLocation() as { state?: { from?: string } };
   const [code, setCode] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [googleFailed] = useState(() => consumeGoogleReturn());
   const {
     register,
     handleSubmit,
@@ -113,6 +116,11 @@ export default function LoginPage() {
         </>
       }
     >
+      {googleFailed && !serverError && (
+        <Banner tone="amber" className="mb-5">
+          {t("auth.login.googleFailed")}
+        </Banner>
+      )}
       {endedReason && !serverError && (
         <Banner tone="blue" className="mb-5">
           {endedReason === "inactive"

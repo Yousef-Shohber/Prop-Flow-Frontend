@@ -1,4 +1,4 @@
-import { type HTMLAttributes, type ReactNode } from "react";
+import { useState, type HTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { initials } from "@/lib/format";
 
@@ -75,14 +75,17 @@ export function Avatar({
     height: size,
     fontSize: Math.max(11, size * 0.38),
   };
-  if (user?.avatar?.url) {
+  const url = user?.avatar?.url;
+  const [failedUrl, setFailedUrl] = useState<string | null>(null);
+  if (url && failedUrl !== url) {
     return (
       <img
-        src={user.avatar.url}
+        src={url}
         alt=""
         width={size}
         height={size}
         loading="lazy"
+        onError={() => setFailedUrl(url)}
         style={style}
         className={cn(
           "shrink-0 rounded-full bg-surface-2 object-cover",
@@ -158,7 +161,7 @@ export function Banner({
           <div className={cn(title && "mt-0.5", "opacity-95")}>{children}</div>
         )}
       </div>
-      {action}
+      {action && <div className="no-print">{action}</div>}
     </div>
   );
 }

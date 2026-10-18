@@ -20,7 +20,10 @@ export function PropertyLink({
   propertyId: string;
   className?: string;
 }) {
-  const q = useProperty(propertyId);
+  const { role } = useAuth();
+  // The API answers 403 on properties for MAINTENANCE_STAFF: never request them.
+  const q = useProperty(propertyId, role !== "MAINTENANCE_STAFF");
+  if (role === "MAINTENANCE_STAFF") return null;
   if (!q.data)
     return (
       <span className={`text-faint ${className ?? ""}`}>

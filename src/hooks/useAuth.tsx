@@ -18,6 +18,7 @@ import {
 } from "@/api/client";
 import { usersApi } from "@/api/users";
 import { normalizeError } from "@/lib/errors";
+import { clearGoogleFlag } from "@/lib/googleFlow";
 import type { User } from "@/types/models";
 import type { UserRole } from "@/types/enums";
 
@@ -43,6 +44,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isBooting, setBooting] = useState(true);
   const [bootError, setBootError] = useState(false);
+  useEffect(() => {
+    if (user) clearGoogleFlag();
+  }, [user]);
   const [endedReason, setEnded] = useState<SessionEndReason | null>(null);
   const bootRan = useRef(false);
 

@@ -189,6 +189,16 @@ export interface AuditLog {
   metadata: Record<string, unknown> | null;
   ipAddress: string | null;
   createdAt: string;
+  /** Optional enrichment (newer backends). The UI resolves names itself when these are absent. */
+  actor?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: UserRole;
+  } | null;
+  entityLabel?: string | null;
+  refs?: Record<string, { label: string | null; entity?: string }>;
 }
 
 export interface DashboardStats {

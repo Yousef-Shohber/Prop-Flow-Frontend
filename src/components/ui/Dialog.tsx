@@ -31,6 +31,7 @@ export function Dialog({
           style={{ animation: "fade-in .18s ease-out" }}
         />
         <RD.Content
+          aria-describedby={undefined}
           className={cn(
             "fixed left-1/2 top-1/2 z-50 max-h-[90dvh] w-[calc(100vw-2rem)] max-w-md overflow-y-auto rounded-sheet border border-line bg-surface p-6 shadow-pop focus:outline-none",
             className,
@@ -55,11 +56,7 @@ export function Dialog({
             <RD.Description className="mt-2 text-sm leading-relaxed text-muted">
               {description}
             </RD.Description>
-          ) : (
-            <RD.Description className="sr-only">
-              {typeof title === "string" ? title : ""}
-            </RD.Description>
-          )}
+          ) : null}
           {children && <div className="mt-5">{children}</div>}
           {footer && (
             <div className="mt-6 flex flex-wrap justify-end gap-2.5">

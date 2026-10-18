@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { FilterBar, type FilterField } from "@/components/ui/FilterBar";
 import { Card, Tag } from "@/components/ui/Misc";
+import { ExportButton } from "@/components/ui/ExportButton";
+import { fetchAll } from "@/lib/fetchAll";
 import { CountBadge, PageHeader } from "@/components/ui/PageHeader";
 import { Pagination } from "@/components/ui/Pagination";
 import {
@@ -141,11 +143,42 @@ export default function PropertiesPage() {
           isTenant ? t("properties.subTenant") : t("properties.subOwner")
         }
         actions={
-          !isTenant && (
-            <Button to={paths.propertyNew} icon={<Plus className="size-4" />}>
-              {t("properties.new")}
-            </Button>
-          )
+          <>
+            <ExportButton
+              name="properties"
+              disabled={!q.data?.meta.total}
+              load={async () => {
+                const { page: _p, limit: _l, ...filters } = params;
+                const { rows, truncated } = await fetchAll((page, limit) =>
+                  propertiesApi.list({ ...filters, page, limit }),
+                );
+                return {
+                  truncated,
+                  headers: [
+                    t("export.col.name"),
+                    t("export.col.type"),
+                    t("export.col.address"),
+                    t("export.col.city"),
+                    t("export.col.country"),
+                    t("export.col.created"),
+                  ],
+                  rows: rows.map((p) => [
+                    p.name,
+                    label("ptype", p.propertyType),
+                    p.address,
+                    p.city,
+                    p.country,
+                    p.createdAt.slice(0, 10),
+                  ]),
+                };
+              }}
+            />
+            {!isTenant && (
+              <Button to={paths.propertyNew} icon={<Plus className="size-4" />}>
+                {t("properties.new")}
+              </Button>
+            )}
+          </>
         }
       />
       <FilterBar

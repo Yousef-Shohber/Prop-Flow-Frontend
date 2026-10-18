@@ -1,6 +1,15 @@
 import * as DM from "@radix-ui/react-dropdown-menu";
 import * as RD from "@radix-ui/react-dialog";
-import { Bell, ChevronDown, LogOut, Menu, UserRound, X } from "lucide-react";
+import {
+  Bell,
+  ChevronDown,
+  LogOut,
+  Menu,
+  Search,
+  UserRound,
+  X,
+} from "lucide-react";
+import { openPalette } from "./CommandPalette";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -22,6 +31,8 @@ function useCrumbs() {
   const segs = pathname.split("/").filter(Boolean);
   if (segs.length === 0) return [];
   const all = NAV_GROUPS.flatMap((g) => g.items);
+  const whole = all.find((i) => i.to === pathname);
+  if (whole) return [{ label: t(whole.labelKey) }];
   const root = all.find((i) => i.to === `/${segs[0]}`);
   const crumbs: { label: string; to?: string }[] = [
     {
@@ -49,7 +60,7 @@ export function Header() {
   const { data: unread = 0 } = useUnreadCount();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-line bg-bg/85 px-4 backdrop-blur-md sm:px-6">
+    <header className="no-print sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-line bg-bg/85 px-4 backdrop-blur-md sm:px-6">
       <RD.Root open={drawer} onOpenChange={setDrawer}>
         <RD.Trigger asChild>
           <button
@@ -120,6 +131,15 @@ export function Header() {
       </nav>
       <div className="flex-1 sm:hidden" />
 
+      <button
+        type="button"
+        onClick={openPalette}
+        aria-label={t("palette.open")}
+        title={t("palette.open")}
+        className="inline-flex size-10 items-center justify-center rounded-control text-muted hover:bg-surface-2 hover:text-ink"
+      >
+        <Search className="size-5" />
+      </button>
       <LangToggle />
       <ThemeToggle />
       <Link

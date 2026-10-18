@@ -83,6 +83,11 @@ export function PublicFooter() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link className={link} to={paths.help}>
+                {t("nav.help")}
+              </Link>
+            </li>
           </ul>
         </nav>
         <nav aria-label={t("landing.footer.account")}>

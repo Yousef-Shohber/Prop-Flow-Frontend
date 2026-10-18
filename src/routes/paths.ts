@@ -29,6 +29,7 @@ export const paths = {
   leases: "/leases",
   leaseNew: "/leases/new",
   lease: (id: string) => `/leases/${id}`,
+  leaseContract: (id: string) => `/leases/${id}/contract`,
   leaseEdit: (id: string) => `/leases/${id}/edit`,
   renewals: "/lease-renewal-requests",
   renewal: (id: string) => `/lease-renewal-requests/${id}`,
@@ -39,6 +40,9 @@ export const paths = {
   profile: "/profile",
   users: "/users",
   auditLogs: "/audit-logs",
+  timeline: "/timeline",
+  rentRoll: "/reports/rent-roll",
+  help: "/help",
 } as const;
 
 /** Everyone lands on the Welcome / Overview page first; the analytics dashboard stays one click away (owners, admins). */

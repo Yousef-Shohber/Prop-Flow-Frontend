@@ -5,6 +5,8 @@ import { maintenanceApi } from "@/api/maintenance";
 import { Button } from "@/components/ui/Button";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { FilterBar, type FilterField } from "@/components/ui/FilterBar";
+import { ExportButton } from "@/components/ui/ExportButton";
+import { fetchAll } from "@/lib/fetchAll";
 import { CountBadge, PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/States";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -148,14 +150,51 @@ export default function MaintenancePage() {
         title={t("mnt.title")}
         subtitle={sub}
         actions={
-          role === "TENANT" && (
-            <Button
-              to={paths.maintenanceNew}
-              icon={<Plus className="size-4" />}
-            >
-              {t("mnt.new")}
-            </Button>
-          )
+          <>
+            {(role === "OWNER" || role === "ADMIN") && (
+              <ExportButton
+                name="maintenance"
+                disabled={!q.data?.meta.total}
+                load={async () => {
+                  const { page: _p, limit: _l, ...filters } = params;
+                  const { rows, truncated } = await fetchAll((page, limit) =>
+                    maintenanceApi.list({ ...filters, page, limit }),
+                  );
+                  return {
+                    truncated,
+                    headers: [
+                      t("export.col.title"),
+                      t("export.col.unit"),
+                      t("export.col.category"),
+                      t("export.col.priority"),
+                      t("export.col.status"),
+                      t("export.col.scheduled"),
+                      t("export.col.created"),
+                      t("export.col.resolved"),
+                    ],
+                    rows: rows.map((m) => [
+                      m.title,
+                      m.unit.unitNumber,
+                      label("cat", m.category),
+                      label("pri", m.priority),
+                      label("mnt", m.status),
+                      m.scheduledDate ?? "",
+                      m.createdAt.slice(0, 10),
+                      m.resolvedAt ? m.resolvedAt.slice(0, 10) : "",
+                    ]),
+                  };
+                }}
+              />
+            )}
+            {role === "TENANT" && (
+              <Button
+                to={paths.maintenanceNew}
+                icon={<Plus className="size-4" />}
+              >
+                {t("mnt.new")}
+              </Button>
+            )}
+          </>
         }
       />
       <FilterBar

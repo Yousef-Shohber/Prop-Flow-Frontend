@@ -5,7 +5,10 @@ import {
   ClipboardList,
   DoorOpen,
   FileSignature,
+  CalendarRange,
+  FileSpreadsheet,
   History,
+  LifeBuoy,
   LayoutDashboard,
   RefreshCw,
   ShieldCheck,
@@ -65,6 +68,18 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: DoorOpen,
         roles: ALL_BUT_STAFF,
       },
+      {
+        to: paths.timeline,
+        labelKey: "nav.timeline",
+        icon: CalendarRange,
+        roles: MANAGERS,
+      },
+      {
+        to: paths.rentRoll,
+        labelKey: "nav.rentRoll",
+        icon: FileSpreadsheet,
+        roles: MANAGERS,
+      },
     ],
   },
   {
@@ -111,6 +126,17 @@ export const NAV_GROUPS: NavGroup[] = [
         labelKey: "nav.auditLogs",
         icon: History,
         roles: ["ADMIN"],
+      },
+    ],
+  },
+  {
+    labelKey: "nav.groupSupport",
+    items: [
+      {
+        to: paths.help,
+        labelKey: "nav.help",
+        icon: LifeBuoy,
+        roles: ["TENANT", "OWNER", "ADMIN", "MAINTENANCE_STAFF"],
       },
     ],
   },

@@ -6,6 +6,7 @@ import { notificationsApi } from "@/api/notifications";
 import { CountUp } from "@/components/ui/CountUp";
 import { CardSection } from "@/components/ui/Misc";
 import { EmptyState, ErrorState } from "@/components/ui/States";
+import { useNotificationText } from "@/hooks/useNotificationText";
 import { notificationTarget } from "@/features/notifications/target";
 import { useEnumLabel, useI18n } from "@/i18n";
 import { todayISO, parseISODate } from "@/lib/dates";
@@ -162,6 +163,7 @@ export function daysLeft(end: string) {
 export function Activity() {
   const { t, lang } = useI18n();
   const label = useEnumLabel();
+  const notifText = useNotificationText();
   const q = useQuery({
     queryKey: ["notifications", { page: 1, limit: 5, home: true }],
     queryFn: () => notificationsApi.list({ page: 1, limit: 5 }),
@@ -199,7 +201,7 @@ export function Activity() {
                     aria-label={t("home.unread")}
                   />
                 )}
-                {n.title || label("notif", n.type)}
+                {notifText(n).title || label("notif", n.type)}
               </>
             }
             meta={`${label("notif", n.type)} · ${formatRelative(n.createdAt, lang)}`}
@@ -219,7 +221,7 @@ export function QuickActions({
 
   return (
     <CardSection data-rise title={t("home.quick")}>
-      <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {items.map((a, index) => (
           <li
             key={a.to + a.label}
@@ -229,12 +231,12 @@ export function QuickActions({
           >
             <Link
               to={a.to}
-              className="group flex items-center gap-3 rounded-control border border-line px-3.5 py-3 text-sm font-medium transition-all hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface-2 hover:shadow-soft"
+              className="group flex min-h-[76px] items-center gap-3 rounded-control border border-line px-4 py-4 text-sm font-medium transition-all hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface-2 hover:shadow-soft"
             >
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-ink transition-transform group-hover:scale-105">
-                <a.icon className="size-[1.05rem]" aria-hidden />
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-ink transition-transform group-hover:scale-105">
+                <a.icon className="size-[1.1rem]" aria-hidden />
               </span>
-              <span className="min-w-0 flex-1 truncate">{a.label}</span>
+              <span className="min-w-0 flex-1">{a.label}</span>
               <ArrowRight
                 className="size-4 shrink-0 text-faint transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5"
                 aria-hidden

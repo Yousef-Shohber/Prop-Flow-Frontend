@@ -13,7 +13,7 @@ export function Toaster() {
     <div
       aria-live="polite"
       aria-atomic="false"
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex flex-col items-center gap-2 p-4 sm:items-start sm:p-6"
+      className="no-print pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex flex-col items-center gap-2 p-4 sm:items-start sm:p-6"
     >
       {items.map((it) => {
         const Icon = ICON[it.kind];

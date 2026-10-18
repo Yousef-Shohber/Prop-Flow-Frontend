@@ -1,6 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, BellRing, CheckCheck, ChevronLeft } from "lucide-react";
+import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import { useNotificationText } from "@/hooks/useNotificationText";
+import { addDaysISO, dayOfInstant, todayISO } from "@/lib/dates";
 import { notificationsApi } from "@/api/notifications";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Misc";
@@ -46,6 +49,26 @@ export default function NotificationsPage() {
     placeholderData: (p) => p,
   });
   const unread = q.data?.meta.unreadCount ?? 0;
+  const notifText = useNotificationText();
+  const cat = state.filters.cat ?? "";
+  const category = (n: AppNotification) =>
+    n.type.startsWith("MAINTENANCE_")
+      ? "maintenance"
+      : n.type.startsWith("RENTAL_REQUEST_")
+        ? "requests"
+        : n.type === "OWNER_VERIFICATION_CHANGED"
+          ? "account"
+          : "leases";
+  const rows = (q.data?.data ?? []).filter((n) => !cat || category(n) === cat);
+  const today = todayISO();
+  const dayGroup = (n: AppNotification) => {
+    const d = dayOfInstant(n.createdAt);
+    return d === today
+      ? "today"
+      : d === addDaysISO(today, -1)
+        ? "yesterday"
+        : "earlier";
+  };
 
   const read = useMutation({
     mutationFn: (id: string) => notificationsApi.markRead(id),
@@ -128,6 +151,28 @@ export default function NotificationsPage() {
           </>
         }
       />
+      <div
+        role="group"
+        aria-label={t("notif.filterBy")}
+        className="mb-4 flex flex-wrap gap-2"
+      >
+        {["", "leases", "requests", "maintenance", "account"].map((c) => (
+          <button
+            key={c || "all"}
+            type="button"
+            aria-pressed={cat === c}
+            onClick={() => update({ filters: { cat: c || undefined } })}
+            className={cn(
+              "min-h-11 rounded-full border px-4 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent",
+              cat === c
+                ? "border-transparent bg-primary text-on-primary"
+                : "border-line-strong bg-surface hover:bg-surface-2",
+            )}
+          >
+            {t(`notif.cat.${c || "all"}`)}
+          </button>
+        ))}
+      </div>
       <Card className="overflow-hidden">
         {q.isLoading ? (
           <LoadingSkeleton variant="list" rows={6} />
@@ -149,81 +194,89 @@ export default function NotificationsPage() {
         ) : (
           <>
             <ul className="divide-y divide-line">
-              {q.data?.data.map((n) => {
+              {rows.map((n, idx) => {
+                const g = dayGroup(n);
+                const showHead = idx === 0 || dayGroup(rows[idx - 1]) !== g;
                 const target = notificationTarget(n);
                 // the API sends English text; in Arabic we show the matching localized sentence for the notification type
-                const loc = lang === "ar" && has(`notifText.${n.type}.title`);
-                const title = loc ? t(`notifText.${n.type}.title`) : n.title;
-                const message = loc
-                  ? t(`notifText.${n.type}.message`)
-                  : n.message;
+                const { localized: loc, title, message } = notifText(n);
                 const Row = target || !n.isRead ? "button" : "div";
                 return (
-                  <li key={n.id}>
-                    <Row
-                      {...(Row === "button"
-                        ? { type: "button" as const, onClick: () => open(n) }
-                        : {})}
-                      className={cn(
-                        "flex w-full items-start gap-4 px-5 py-4 text-start transition-colors",
-                        Row === "button" && "hover:bg-surface-2/70",
-                        !n.isRead && "bg-accent-soft/40",
-                      )}
-                    >
-                      <span
+                  <Fragment key={n.id}>
+                    {showHead && (
+                      <li
+                        role="presentation"
+                        className="bg-surface-2/60 px-5 py-2 text-xs font-semibold text-muted"
+                      >
+                        {t(`notif.day.${g}`)}
+                      </li>
+                    )}
+                    <li>
+                      <Row
+                        {...(Row === "button"
+                          ? { type: "button" as const, onClick: () => open(n) }
+                          : {})}
                         className={cn(
-                          "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl",
-                          n.isRead
-                            ? "bg-surface-2 text-faint"
-                            : "bg-accent-soft text-accent-ink",
+                          "flex w-full items-start gap-4 px-5 py-4 text-start transition-colors",
+                          Row === "button" && "hover:bg-surface-2/70",
+                          !n.isRead && "bg-accent-soft/40",
                         )}
                       >
-                        {n.isRead ? (
-                          <Bell className="size-5" />
-                        ) : (
-                          <BellRing className="size-5" />
-                        )}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                          <span
-                            className={cn(
-                              "text-sm",
-                              !n.isRead ? "font-semibold" : "font-medium",
-                            )}
-                          >
-                            {title}
-                          </span>
-                          {!loc && (
-                            <span className="rounded-md bg-surface-2 px-1.5 py-0.5 text-[0.6875rem] text-muted">
-                              {label("notif", n.type)}
-                            </span>
+                        <span
+                          className={cn(
+                            "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl",
+                            n.isRead
+                              ? "bg-surface-2 text-faint"
+                              : "bg-accent-soft text-accent-ink",
+                          )}
+                        >
+                          {n.isRead ? (
+                            <Bell className="size-5" />
+                          ) : (
+                            <BellRing className="size-5" />
                           )}
                         </span>
-                        <span
-                          className="mt-0.5 block text-sm text-muted"
-                          dir="auto"
-                        >
-                          {message}
+                        <span className="min-w-0 flex-1">
+                          <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                            <span
+                              className={cn(
+                                "text-sm",
+                                !n.isRead ? "font-semibold" : "font-medium",
+                              )}
+                            >
+                              {title}
+                            </span>
+                            {!loc && (
+                              <span className="rounded-md bg-surface-2 px-1.5 py-0.5 text-[0.6875rem] text-muted">
+                                {label("notif", n.type)}
+                              </span>
+                            )}
+                          </span>
+                          <span
+                            className="mt-0.5 block text-sm text-muted"
+                            dir="auto"
+                          >
+                            {message}
+                          </span>
+                          <span className="mt-1.5 block text-xs text-faint">
+                            {formatRelative(n.createdAt, lang)}
+                          </span>
                         </span>
-                        <span className="mt-1.5 block text-xs text-faint">
-                          {formatRelative(n.createdAt, lang)}
-                        </span>
-                      </span>
-                      {!n.isRead && (
-                        <span
-                          className="mt-2 size-2.5 shrink-0 rounded-full bg-accent"
-                          aria-label={t("notif.unread")}
-                        />
-                      )}
-                      {target && (
-                        <ChevronLeft
-                          className="mt-2 size-4 shrink-0 text-faint ltr:rotate-180"
-                          aria-hidden
-                        />
-                      )}
-                    </Row>
-                  </li>
+                        {!n.isRead && (
+                          <span
+                            className="mt-2 size-2.5 shrink-0 rounded-full bg-accent"
+                            aria-label={t("notif.unread")}
+                          />
+                        )}
+                        {target && (
+                          <ChevronLeft
+                            className="mt-2 size-4 shrink-0 text-faint ltr:rotate-180"
+                            aria-hidden
+                          />
+                        )}
+                      </Row>
+                    </li>
+                  </Fragment>
                 );
               })}
             </ul>

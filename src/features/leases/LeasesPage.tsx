@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { FileSignature, Plus, X } from "lucide-react";
+import { FileDown, FileSignature, Plus, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leasesApi } from "@/api/leases";
 import { Button } from "@/components/ui/Button";
@@ -121,6 +121,22 @@ export default function LeasesPage() {
       header: t("common.status"),
       cell: (l) => <StatusBadge kind="lease" value={l.status} />,
     },
+    {
+      key: "pdf",
+      header: "",
+      cell: (l) => (
+        <Button
+          size="sm"
+          variant="ghost"
+          to={`${paths.leaseContract(l.id)}?print=1`}
+          onClick={(e) => e.stopPropagation()}
+          icon={<FileDown className="size-4" />}
+          aria-label={t("contract.download")}
+        >
+          PDF
+        </Button>
+      ),
+    },
   ];
   const has = Object.values(f).some(Boolean);
 
@@ -132,11 +148,13 @@ export default function LeasesPage() {
         title={t("leases.title")}
         subtitle={tenant ? t("leases.subTenant") : t("leases.subOwner")}
         actions={
-          !tenant && (
-            <Button to={paths.leaseNew} icon={<Plus className="size-4" />}>
-              {t("leases.new")}
-            </Button>
-          )
+          <>
+            {!tenant && (
+              <Button to={paths.leaseNew} icon={<Plus className="size-4" />}>
+                {t("leases.new")}
+              </Button>
+            )}
+          </>
         }
       />
       {(f.unitId || f.tenantId) && (

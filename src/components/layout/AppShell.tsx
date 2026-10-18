@@ -8,6 +8,7 @@ import { paths } from "@/routes/paths";
 import { Banner } from "../ui/Misc";
 import { Button } from "../ui/Button";
 import { ErrorBoundary } from "../ui/ErrorBoundary";
+import { CommandPalette } from "./CommandPalette";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
 
@@ -47,6 +48,7 @@ export function AppShell() {
       <a href="#main" className="skip-link">
         {t("a11y.skip")}
       </a>
+      <CommandPalette />
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <Header />

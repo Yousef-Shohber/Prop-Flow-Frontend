@@ -96,7 +96,7 @@ export function NavList({ onNavigate }: { onNavigate?: () => void }) {
 
 export function Sidebar() {
   return (
-    <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-e border-line bg-surface-2/60 lg:flex">
+    <aside className="no-print sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-e border-line bg-surface-2/60 lg:flex">
       <div className="flex h-16 items-center px-5">
         <NavLink to="/" aria-label="PropFlow">
           <Logo />
@@ -104,7 +104,7 @@ export function Sidebar() {
       </div>
       <NavList />
       <p className="px-5 py-4 text-xs text-faint" dir="ltr">
-        PropFlow · v1.0
+        PropFlow
       </p>
     </aside>
   );

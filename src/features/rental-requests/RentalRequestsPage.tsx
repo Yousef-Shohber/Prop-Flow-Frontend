@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { FilterBar, type FilterField } from "@/components/ui/FilterBar";
 import { Banner } from "@/components/ui/Misc";
+import { ExportButton } from "@/components/ui/ExportButton";
+import { fetchAll } from "@/lib/fetchAll";
+import { loadPropertyNames } from "@/lib/exportHelpers";
 import { CountBadge, PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/States";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -115,6 +118,44 @@ export default function RentalRequestsPage() {
         badge={<CountBadge n={q.data?.meta.total} />}
         title={t("rr.title")}
         subtitle={tenant ? t("rr.subTenant") : t("rr.subOwner")}
+        actions={
+          <ExportButton
+            name="rental-requests"
+            disabled={!q.data?.meta.total}
+            load={async () => {
+              const { page: _p, limit: _l, ...filters } = params;
+              const [{ rows, truncated }, props] = await Promise.all([
+                fetchAll((page, limit) =>
+                  rentalRequestsApi.list({ ...filters, page, limit }),
+                ),
+                loadPropertyNames().catch(() => new Map<string, string>()),
+              ]);
+              return {
+                truncated,
+                headers: [
+                  t("export.col.unit"),
+                  t("export.col.property"),
+                  ...(tenant ? [] : [t("export.col.tenant")]),
+                  t("export.col.start"),
+                  t("export.col.end"),
+                  t("export.col.rent"),
+                  t("export.col.status"),
+                  t("export.col.message"),
+                ],
+                rows: rows.map((r) => [
+                  r.unit?.unitNumber ?? "",
+                  props.get(r.unit?.propertyId ?? "") ?? "",
+                  ...(tenant ? [] : [fullName(r.tenant)]),
+                  r.startDate,
+                  r.endDate,
+                  r.rentAmount,
+                  label("rr", r.status),
+                  r.message ?? "",
+                ]),
+              };
+            }}
+          />
+        }
       />
       {f.unitId && (
         <Banner

@@ -1,5 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CalendarPlus, Check, Pencil, Wrench, XOctagon } from "lucide-react";
+import {
+  CalendarPlus,
+  Check,
+  FileDown,
+  Pencil,
+  Wrench,
+  XOctagon,
+} from "lucide-react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { leasesApi } from "@/api/leases";
@@ -31,6 +38,8 @@ import {
   RequestRenewalDialog,
 } from "../renewals/RenewalDialogs";
 import { PropertyLink } from "../units/UnitBits";
+import { LeaseProgress } from "./LeaseProgress";
+import { LogoMark } from "@/components/layout/Logo";
 
 export default function LeaseDetailPage() {
   const { id = "" } = useParams();
@@ -128,6 +137,15 @@ export default function LeaseDetailPage() {
 
   return (
     <>
+      <div className="print-only mb-6 items-center justify-between gap-4 border-b border-line pb-4">
+        <div className="flex items-center gap-3">
+          <LogoMark className="size-10" />
+          <span className="font-display text-xl font-bold">PropFlow</span>
+        </div>
+        <span className="num text-sm text-muted">
+          {formatDate(todayISO(), lang)}
+        </span>
+      </div>
       <PageHeader
         title={t("units.unit", { n: l.unit.unitNumber })}
         subtitle={
@@ -137,66 +155,75 @@ export default function LeaseDetailPage() {
           </span>
         }
         actions={
-          manager ? (
-            <>
-              {pending && (
+          <>
+            <Button
+              variant="secondary"
+              icon={<FileDown className="size-4" />}
+              to={paths.leaseContract(id)}
+            >
+              {t("contract.download")}
+            </Button>
+            {manager ? (
+              <>
+                {pending && (
+                  <Button
+                    variant="secondary"
+                    to={paths.leaseEdit(id)}
+                    icon={<Pencil className="size-4" />}
+                  >
+                    {t("common.edit")}
+                  </Button>
+                )}
+                {active && (
+                  <Button
+                    variant="secondary"
+                    icon={<CalendarPlus className="size-4" />}
+                    onClick={() => setDlg("renew")}
+                  >
+                    {t("leases.renew")}
+                  </Button>
+                )}
+                {(pending || active) && (
+                  <Button
+                    variant="secondary"
+                    className="text-[var(--red-fg)]"
+                    icon={<XOctagon className="size-4" />}
+                    onClick={() => setDlg("terminate")}
+                  >
+                    {t("leases.terminate")}
+                  </Button>
+                )}
+                {pending && (
+                  <Button
+                    icon={<Check className="size-4" />}
+                    disabled={!canActivate}
+                    loading={activate.isPending}
+                    onClick={() => activate.mutate()}
+                  >
+                    {t("leases.activate")}
+                  </Button>
+                )}
+              </>
+            ) : tenant && active ? (
+              <>
                 <Button
                   variant="secondary"
-                  to={paths.leaseEdit(id)}
-                  icon={<Pencil className="size-4" />}
+                  icon={<Wrench className="size-4" />}
+                  to={`${paths.maintenanceNew}?unitId=${l.unitId}`}
                 >
-                  {t("common.edit")}
+                  {t("units.report")}
                 </Button>
-              )}
-              {active && (
-                <Button
-                  variant="secondary"
-                  icon={<CalendarPlus className="size-4" />}
-                  onClick={() => setDlg("renew")}
-                >
-                  {t("leases.renew")}
-                </Button>
-              )}
-              {(pending || active) && (
-                <Button
-                  variant="secondary"
-                  className="text-[var(--red-fg)]"
-                  icon={<XOctagon className="size-4" />}
-                  onClick={() => setDlg("terminate")}
-                >
-                  {t("leases.terminate")}
-                </Button>
-              )}
-              {pending && (
-                <Button
-                  icon={<Check className="size-4" />}
-                  disabled={!canActivate}
-                  loading={activate.isPending}
-                  onClick={() => activate.mutate()}
-                >
-                  {t("leases.activate")}
-                </Button>
-              )}
-            </>
-          ) : tenant && active ? (
-            <>
-              <Button
-                variant="secondary"
-                icon={<Wrench className="size-4" />}
-                to={`${paths.maintenanceNew}?unitId=${l.unitId}`}
-              >
-                {t("units.report")}
-              </Button>
-              {!pendingRenewal && (
-                <Button
-                  icon={<CalendarPlus className="size-4" />}
-                  onClick={() => setDlg("request")}
-                >
-                  {t("lrr.request")}
-                </Button>
-              )}
-            </>
-          ) : null
+                {!pendingRenewal && (
+                  <Button
+                    icon={<CalendarPlus className="size-4" />}
+                    onClick={() => setDlg("request")}
+                  >
+                    {t("lrr.request")}
+                  </Button>
+                )}
+              </>
+            ) : null}
+          </>
         }
       />
 
@@ -287,6 +314,12 @@ export default function LeaseDetailPage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         <CardSection title={t("leases.dates")}>
+          <LeaseProgress
+            start={start}
+            end={end}
+            status={l.status}
+            className="mb-5 rounded-xl bg-surface-2/70 p-4"
+          />
           <DescriptionList
             items={[
               ...(tenant

@@ -1,4 +1,5 @@
-import { Users } from "lucide-react";
+import { ShieldCheck, Users } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { usersApi } from "@/api/users";
@@ -7,10 +8,12 @@ import { DataTable, type Column } from "@/components/ui/DataTable";
 import { FilterBar, type FilterField } from "@/components/ui/FilterBar";
 import { Select } from "@/components/ui/Field";
 import { Avatar, Banner, Tag } from "@/components/ui/Misc";
+import { ExportButton } from "@/components/ui/ExportButton";
+import { fetchAll } from "@/lib/fetchAll";
 import { CountBadge, PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/States";
 import { Switch } from "@/components/ui/Switch";
-import { useInvalidate } from "@/hooks/queries";
+import { useAllUsers, useInvalidate } from "@/hooks/queries";
 import { useAuth } from "@/hooks/useAuth";
 import { useListParams } from "@/hooks/useListParams";
 import { toast } from "@/hooks/useToast";
@@ -43,9 +46,37 @@ export default function UsersPage() {
         ? undefined
         : f.isActive === "true",
   };
+  // The API has no "unverified" filter: owners awaiting verification are found client-side.
+  const pendingOnly = f.pending === "true";
+  const allUsers = useAllUsers();
+  const pendingCount = (allUsers.data ?? []).filter(
+    (u) => u.role === "OWNER" && u.isActive && !u.ownerVerified,
+  ).length;
   const q = useQuery({
-    queryKey: ["users", "list", params],
-    queryFn: () => usersApi.list(params),
+    queryKey: ["users", "list", pendingOnly ? "pending" : params],
+    queryFn: async () => {
+      if (!pendingOnly) return usersApi.list(params);
+      const { rows } = await fetchAll((page, limit) =>
+        usersApi.list({
+          role: "OWNER",
+          isActive: true,
+          page,
+          limit,
+          sortBy: "createdAt",
+          sortOrder: "ASC",
+        }),
+      );
+      const data = rows.filter((u) => !u.ownerVerified);
+      return {
+        data,
+        meta: {
+          page: 1,
+          limit: Math.max(1, data.length),
+          total: data.length,
+          totalPages: 1,
+        },
+      };
+    },
     placeholderData: (p) => p,
   });
   const [confirm, setConfirm] = useState<{
@@ -55,6 +86,7 @@ export default function UsersPage() {
 
   const afterChange = async (u: User, extra?: "verification") => {
     await qc.invalidateQueries({ queryKey: ["users", "list"] });
+    await qc.invalidateQueries({ queryKey: ["users", "all"] });
     if (u.id === me?.id) await inv.me();
     if (extra)
       await Promise.all([
@@ -224,10 +256,70 @@ export default function UsersPage() {
         badge={<CountBadge n={q.data?.meta.total} />}
         title={t("users.title")}
         subtitle={t("users.sub")}
+        actions={
+          <ExportButton
+            name="users"
+            disabled={!q.data?.meta.total}
+            load={async () => {
+              const { page: _p, limit: _l, ...filters } = params;
+              const { rows, truncated } = await fetchAll((page, limit) =>
+                usersApi.list({ ...filters, page, limit }),
+              );
+              const yn = (v: boolean) => (v ? t("export.yes") : t("export.no"));
+              return {
+                truncated,
+                headers: [
+                  t("export.col.name"),
+                  t("export.col.email"),
+                  t("export.col.phone"),
+                  t("export.col.role"),
+                  t("export.col.active"),
+                  t("export.col.verifiedOwner"),
+                  t("export.col.emailVerified"),
+                  t("export.col.created"),
+                ],
+                rows: rows.map((u) => [
+                  fullName(u),
+                  u.email,
+                  u.phone ?? "",
+                  label("role", u.role),
+                  yn(u.isActive),
+                  u.role === "OWNER" ? yn(u.ownerVerified) : "",
+                  yn(u.isEmailVerified),
+                  u.createdAt.slice(0, 10),
+                ]),
+              };
+            }}
+          />
+        }
       />
       <Banner tone="blue" className="mb-5">
         {t("users.pendingHint")} {t("users.roleChangeNote")}
       </Banner>
+      <div className="mb-3">
+        <button
+          type="button"
+          aria-pressed={pendingOnly}
+          onClick={() =>
+            update({
+              filters: { pending: pendingOnly ? undefined : "true" },
+              page: 1,
+            })
+          }
+          className={cn(
+            "inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent",
+            pendingOnly
+              ? "border-transparent bg-primary text-on-primary"
+              : "border-line-strong bg-surface hover:bg-surface-2",
+          )}
+        >
+          <ShieldCheck className="size-4" aria-hidden />
+          {t("users.awaiting")}
+          <span className="num rounded-full bg-[var(--amber-bg)] px-2 text-xs text-[var(--amber-fg)]">
+            {pendingCount}
+          </span>
+        </button>
+      </div>
       <FilterBar
         className="mb-5"
         fields={fields}
@@ -242,8 +334,10 @@ export default function UsersPage() {
         error={q.error}
         onRetry={() => q.refetch()}
         rowKey={(u) => u.id}
-        page={state.page}
-        limit={state.limit}
+        page={pendingOnly ? 1 : state.page}
+        limit={
+          pendingOnly ? Math.max(1, q.data?.data.length ?? 1) : state.limit
+        }
         total={q.data?.meta.total ?? 0}
         totalPages={q.data?.meta.totalPages ?? 1}
         onPageChange={(page) => update({ page })}

@@ -8,7 +8,7 @@ export function formatEnum(value: string | null | undefined): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-const localeTag = (lang: string) =>
+export const localeTag = (lang: string) =>
   lang === "ar" ? "ar-EG-u-nu-latn" : "en-GB";
 
 export function formatDate(
