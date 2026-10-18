@@ -1315,13 +1315,7 @@ const en = {
     markAll: "Mark all as read",
     markedAll: "All notifications marked as read",
     filterBy: "Filter by type",
-    cat: {
-      all: "All",
-      leases: "Leases",
-      requests: "Requests",
-      maintenance: "Maintenance",
-      account: "Account",
-    },
+    cat: { all: "All", leases: "Leases", requests: "Requests", maintenance: "Maintenance", account: "Account" },
     day: { today: "Today", yesterday: "Yesterday", earlier: "Earlier" },
     empty: "You are all caught up",
     emptyText: "New activity on your rentals will show up here.",
@@ -1395,7 +1389,7 @@ const en = {
     notOwner: "Only owner accounts can be verified.",
     awaiting: "Awaiting verification",
     pendingHint:
-      "Filter by Owner and scan the Verified column to find owners waiting for approval.",
+      "Use “Awaiting verification” to list owners waiting for approval, then switch on Verified owner for the ones you approve.",
     roleChangeNote: "Changing a role resets owner verification.",
     status: "Account",
     deactivated: "Deactivated",
@@ -1438,10 +1432,8 @@ const en = {
     s: {
       userActivated: "Account activated",
       userDeactivated: "Account deactivated",
-      ownerVerified:
-        "Owner verified. Their properties and units are now visible to tenants.",
-      ownerUnverified:
-        "Verification removed. Their properties and units are hidden from tenants.",
+      ownerVerified: "Owner verified. Their properties and units are now visible to tenants.",
+      ownerUnverified: "Verification removed. Their properties and units are hidden from tenants.",
       roleSelf: "The user chose the {role} role themselves",
       roleChanged: "Role changed from {from} to {to}",
       roleSet: "Role set to {role}",
@@ -1451,8 +1443,7 @@ const en = {
       more: "and {n} more",
     },
     why: {
-      COMPETING_LEASE_ACTIVATED:
-        "Another lease for the same unit was activated",
+      COMPETING_LEASE_ACTIVATED: "Another lease for the same unit was activated",
       PROPERTY_DELETED: "The property was deleted",
       SELF_SELECTION: "Chosen by the user",
     },
@@ -1510,8 +1501,7 @@ const en = {
   export: {
     csv: "Export CSV",
     done: "Exported {n} rows",
-    truncated:
-      "Exported the first {n} rows only. Narrow the filters to export the rest.",
+    truncated: "Exported the first {n} rows only. Narrow the filters to export the rest.",
     nothing: "There is nothing to export for the current filters",
     col: {
       unit: "Unit",
@@ -1579,8 +1569,7 @@ const en = {
     daysLeft: "{n} days left",
     unitsCount: "{n} units",
     emptyTitle: "No units to show yet",
-    emptyText:
-      "Add a property and its units, then rent them out to see the timeline.",
+    emptyText: "Add a property and its units, then rent them out to see the timeline.",
     addProperty: "Add a property",
     legend: "Lease status",
     barLabel: "{who}, {from} to {to}, {status}",
@@ -1598,6 +1587,7 @@ const en = {
     end90: "Ending in 90 days",
     daysLeft: "Days left",
     total: "Total monthly rent",
+    approvedBy: "Approved by (name and signature)",
     emptyTitle: "No active leases",
     emptyText: "Active leases appear here once a lease is activated.",
   },
@@ -1608,8 +1598,7 @@ const en = {
     search: "Search the guides",
     searchHint: "Type a word, like lease or repair",
     noResults: "Nothing matches your search",
-    noResultsText:
-      "Try a shorter word, or clear the search to see every guide.",
+    noResultsText: "Try a shorter word, or clear the search to see every guide.",
     clear: "Clear search",
     onThisPage: "On this page",
     guidesFor: "Guides for {role}",
@@ -1786,8 +1775,7 @@ const en = {
     created: "Created on",
     signatures: "Signatures",
     date: "Date",
-    disclaimer:
-      "This document summarizes the lease record kept in PropFlow on the date shown. It becomes binding only when signed by both parties. The terms agreed between the parties apply.",
+    disclaimer: "This document summarizes the lease record kept in PropFlow on the date shown. It becomes binding only when signed by both parties. The terms agreed between the parties apply.",
   },
 
   err: {

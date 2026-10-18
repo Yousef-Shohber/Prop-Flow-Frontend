@@ -221,7 +221,7 @@ export function QuickActions({
 
   return (
     <CardSection data-rise title={t("home.quick")}>
-      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
         {items.map((a, index) => (
           <li
             key={a.to + a.label}
@@ -231,12 +231,12 @@ export function QuickActions({
           >
             <Link
               to={a.to}
-              className="group flex min-h-[76px] items-center gap-3 rounded-control border border-line px-4 py-4 text-sm font-medium transition-all hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface-2 hover:shadow-soft"
+              className="group flex items-center gap-3 rounded-control border border-line px-3.5 py-3 text-sm font-medium transition-all hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface-2 hover:shadow-soft"
             >
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-ink transition-transform group-hover:scale-105">
-                <a.icon className="size-[1.1rem]" aria-hidden />
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-ink transition-transform group-hover:scale-105">
+                <a.icon className="size-[1.05rem]" aria-hidden />
               </span>
-              <span className="min-w-0 flex-1">{a.label}</span>
+              <span className="min-w-0 flex-1 truncate">{a.label}</span>
               <ArrowRight
                 className="size-4 shrink-0 text-faint transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5"
                 aria-hidden

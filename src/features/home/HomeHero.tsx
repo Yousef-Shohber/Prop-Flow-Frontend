@@ -153,7 +153,7 @@ export function HomeHero({
       secondary: [t("home.ctaOwner2"), paths.propertyNew],
     },
     ADMIN: {
-      primary: [t("home.ctaAdmin"), `${paths.users}?role=OWNER`],
+      primary: [t("home.ctaAdmin"), `${paths.users}?pending=true`],
       secondary: [t("home.ctaAdmin2"), paths.dashboard],
     },
     MAINTENANCE_STAFF: { primary: [t("home.ctaStaff"), paths.maintenance] },
