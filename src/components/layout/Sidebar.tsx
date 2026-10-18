@@ -104,7 +104,7 @@ export function Sidebar() {
       </div>
       <NavList />
       <p className="px-5 py-4 text-xs text-faint" dir="ltr">
-        PropFlow Team
+        PropFlow
       </p>
     </aside>
   );

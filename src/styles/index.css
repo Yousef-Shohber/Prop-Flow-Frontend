@@ -5,8 +5,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------- Design tokens ----------
-    Light: cool limestone paper + deep navy ink, saffron as the single warm accent.
-    Dark : deep blue slate (not black) with saffron promoted to the primary action colour. */
+   Light: cool limestone paper + deep navy ink, saffron as the single warm accent.
+   Dark : deep blue slate (not black) with saffron promoted to the primary action colour. */
 :root {
   --bg: #f3f4f1;
   --surface: #ffffff;
