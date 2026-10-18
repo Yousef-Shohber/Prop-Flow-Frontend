@@ -283,8 +283,12 @@ export function Photo({
   children?: React.ReactNode;
 }) {
   const src = srcProp ?? (name ? photoUrl(name) : undefined);
-  const [failed, setFailed] = useState(!src);
-  const [loaded, setLoaded] = useState(false);
+  // Failure/loaded state is remembered per URL, so a `src` that arrives later (or changes) is evaluated afresh
+  // instead of inheriting the "failed" state of the previous render, which had no src yet.
+  const [failedSrc, setFailedSrc] = useState<string>();
+  const [loadedSrc, setLoadedSrc] = useState<string>();
+  const failed = !src || failedSrc === src;
+  const loaded = loadedSrc === src;
   // the container always has its own size (aspect ratio from the caller), so the image never shifts the layout
   return (
     <div
@@ -304,8 +308,8 @@ export function Photo({
           alt={alt}
           loading={eager ? "eager" : "lazy"}
           decoding="async"
-          onLoad={() => setLoaded(true)}
-          onError={() => setFailed(true)}
+          onLoad={() => setLoadedSrc(src)}
+          onError={() => setFailedSrc(src)}
           className={cn(
             "absolute inset-0 size-full object-cover transition-opacity duration-500",
             loaded ? "opacity-100" : "opacity-0",
