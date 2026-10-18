@@ -13,7 +13,6 @@ import { propertiesApi } from "@/api/properties";
 import { unitsApi } from "@/api/units";
 import { LogoMark } from "@/components/layout/Logo";
 import { Button } from "@/components/ui/Button";
-import { Stamp } from "@/components/ui/Stamp";
 import { ExportButton } from "@/components/ui/ExportButton";
 import { Select } from "@/components/ui/Field";
 import { Card } from "@/components/ui/Misc";
@@ -369,23 +368,6 @@ export default function RentRollPage() {
           )}
         </>
       )}
-      <div
-        className="print-only mt-10 items-end justify-between gap-6"
-        style={{ breakInside: "avoid" }}
-      >
-        <div className="w-56">
-          <div className="h-14 border-b border-[#17202e]" />
-          <p className="mt-1.5 text-xs text-muted">{t("rent.approvedBy")}</p>
-        </div>
-        <Stamp
-          date={new Intl.DateTimeFormat("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          }).format(new Date())}
-          status="RENT ROLL"
-        />
-      </div>
     </>
   );
 }

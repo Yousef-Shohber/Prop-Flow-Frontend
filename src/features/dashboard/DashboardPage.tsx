@@ -440,7 +440,7 @@ export default function DashboardPage() {
     ...(role === "ADMIN"
       ? [
           {
-            to: `${paths.users}?pending=true`,
+            to: `${paths.users}?role=OWNER`,
             icon: UserCheck,
             label: t("dashboard.pendingOwners"),
           },

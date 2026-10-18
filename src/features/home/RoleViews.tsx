@@ -1,11 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   Building2,
-  CalendarRange,
   ClipboardList,
   DoorOpen,
   FileSignature,
-  FileSpreadsheet,
   LayoutDashboard,
   Plus,
   RefreshCw,
@@ -68,7 +66,7 @@ export function TenantView() {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-3">
         <Kpi
           icon={FileSignature}
           tone="green"
@@ -97,137 +95,148 @@ export function TenantView() {
         />
       </div>
 
-      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
-        <Panel
-          title={t("home.myLease")}
-          to={paths.leases}
-          linkLabel={t("home.seeAll")}
-          loading={leases.isLoading}
-          error={leases.error}
-          onRetry={() => leases.refetch()}
-          empty={
-            myLeases.length === 0 ? (
-              <EmptyState
-                compact
-                icon={FileSignature}
-                title={t("home.noLease")}
-                description={t("home.noLeaseText")}
-                action={
-                  <Button
-                    to={paths.properties}
-                    icon={<Search className="size-4" />}
-                  >
-                    {t("home.ctaTenant")}
-                  </Button>
-                }
-              />
-            ) : undefined
-          }
-        >
-          <ul className="space-y-3">
-            {myLeases.map((l) => {
-              const left = daysLeft(l.endDate);
+      <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
+        <div className="min-w-0 [&>*]:h-full">
+          <Panel
+            title={t("home.myLease")}
+            to={paths.leases}
+            linkLabel={t("home.seeAll")}
+            loading={leases.isLoading}
+            error={leases.error}
+            onRetry={() => leases.refetch()}
+            empty={
+              myLeases.length === 0 ? (
+                <EmptyState
+                  compact
+                  icon={FileSignature}
+                  title={t("home.noLease")}
+                  description={t("home.noLeaseText")}
+                  action={
+                    <Button
+                      to={paths.properties}
+                      icon={<Search className="size-4" />}
+                    >
+                      {t("home.ctaTenant")}
+                    </Button>
+                  }
+                />
+              ) : undefined
+            }
+          >
+            <ul className="space-y-3">
+              {myLeases.map((l) => {
+                const left = daysLeft(l.endDate);
 
-              return (
-                <li key={l.id}>
-                  <Link
-                    to={paths.lease(l.id)}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-control border border-line p-4 transition-colors hover:bg-surface-2"
-                  >
-                    <span>
-                      <span className="block font-semibold">
-                        {t("units.unit", { n: l.unit.unitNumber })}
-                      </span>
-                      <span className="block text-sm text-muted">
-                        {formatDate(l.startDate, lang)} →{" "}
-                        {formatDate(l.endDate, lang)}
-                      </span>
-                    </span>
-
-                    <span className="text-end">
-                      <StatusBadge kind="lease" value={l.status} />
-                      {left !== null && left >= 0 && (
-                        <span className="mt-1 block text-xs text-muted">
-                          {t("home.daysLeft", {
-                            n: formatNumber(left, lang),
-                          })}
+                return (
+                  <li key={l.id}>
+                    <Link
+                      to={paths.lease(l.id)}
+                      className="flex min-w-0 flex-wrap items-center justify-between gap-3 rounded-control border border-line p-3 transition-colors hover:bg-surface-2 sm:p-4"
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block break-words font-semibold">
+                          {t("units.unit", { n: l.unit.unitNumber })}
                         </span>
-                      )}
-                    </span>
-                    <LeaseProgress
-                      start={l.startDate.slice(0, 10)}
-                      end={l.endDate.slice(0, 10)}
-                      status={l.status}
-                      className="basis-full"
-                    />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </Panel>
+                        <span className="mt-1 block break-words text-sm text-muted">
+                          {formatDate(l.startDate, lang)} →{" "}
+                          {formatDate(l.endDate, lang)}
+                        </span>
+                      </span>
 
-        <Panel
-          title={t("home.myRequests")}
-          to={paths.rentalRequests}
-          linkLabel={t("home.seeAll")}
-          loading={pending.isLoading}
-          error={pending.error}
-          onRetry={() => pending.refetch()}
-          empty={
-            reqs.length === 0 ? (
-              <EmptyState
-                compact
-                icon={ClipboardList}
-                title={t("home.noRequests")}
-                description={t("home.noRequestsText")}
-              />
-            ) : undefined
-          }
-        >
-          <ul className="-mx-2 divide-y divide-line">
-            {reqs.map((r) => (
-              <Row
-                key={r.id}
-                to={paths.rentalRequest(r.id)}
-                title={t("units.unit", {
-                  n: r.unit?.unitNumber ?? "—",
-                })}
-                meta={`${formatDate(r.startDate, lang)} → ${formatDate(r.endDate, lang)}`}
-                end={<StatusBadge kind="rentalRequest" value={r.status} />}
-              />
-            ))}
-          </ul>
-        </Panel>
+                      <span className="flex shrink-0 flex-col items-start gap-1 sm:items-end">
+                        <StatusBadge kind="lease" value={l.status} />
+                        {left !== null && left >= 0 && (
+                          <span className="text-xs text-muted">
+                            {t("home.daysLeft", {
+                              n: formatNumber(left, lang),
+                            })}
+                          </span>
+                        )}
+                      </span>
+
+                      <div className="min-w-0 basis-full">
+                        <LeaseProgress
+                          start={l.startDate.slice(0, 10)}
+                          end={l.endDate.slice(0, 10)}
+                          status={l.status}
+                          className="w-full"
+                        />
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </Panel>
+        </div>
+
+        <div className="min-w-0 [&>*]:h-full">
+          <Panel
+            title={t("home.myRequests")}
+            to={paths.rentalRequests}
+            linkLabel={t("home.seeAll")}
+            loading={pending.isLoading}
+            error={pending.error}
+            onRetry={() => pending.refetch()}
+            empty={
+              reqs.length === 0 ? (
+                <EmptyState
+                  compact
+                  icon={ClipboardList}
+                  title={t("home.noRequests")}
+                  description={t("home.noRequestsText")}
+                />
+              ) : undefined
+            }
+          >
+            <ul className="-mx-2 divide-y divide-line">
+              {reqs.map((r) => (
+                <Row
+                  key={r.id}
+                  to={paths.rentalRequest(r.id)}
+                  title={t("units.unit", {
+                    n: r.unit?.unitNumber ?? "—",
+                  })}
+                  meta={`${formatDate(r.startDate, lang)} → ${formatDate(r.endDate, lang)}`}
+                  end={<StatusBadge kind="rentalRequest" value={r.status} />}
+                />
+              ))}
+            </ul>
+          </Panel>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
-        <Activity />
+      <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
+        <div className="min-w-0 [&>*]:h-full">
+          <Activity />
+        </div>
 
-        <QuickActions
-          items={[
-            {
-              to: paths.properties,
-              icon: Search,
-              label: t("home.ctaTenant"),
-            },
-            {
-              to: paths.maintenanceNew,
-              icon: Wrench,
-              label: t("home.reportProblem"),
-            },
-            {
-              to: paths.rentalRequests,
-              icon: ClipboardList,
-              label: t("nav.rentalRequests"),
-            },
-            {
-              to: paths.renewals,
-              icon: RefreshCw,
-              label: t("nav.renewals"),
-            },
-          ]}
-        />
+        <div className="min-w-0 [&>*]:h-full">
+          <QuickActions
+            items={[
+              {
+                to: paths.properties,
+                icon: Search,
+                label: t("home.ctaTenant"),
+              },
+              {
+                to: paths.maintenanceNew,
+                icon: Wrench,
+                label: t("home.reportProblem"),
+              },
+              {
+                to: paths.rentalRequests,
+                icon: ClipboardList,
+                label: t("nav.rentalRequests"),
+              },
+              {
+                to: paths.renewals,
+                icon: RefreshCw,
+                label: t("nav.renewals"),
+              },
+            ]}
+          />
+        </div>
       </div>
     </>
   );
@@ -442,20 +451,10 @@ export function ManagerView({ role }: { role: "OWNER" | "ADMIN" }) {
               icon: DoorOpen,
               label: t("nav.units"),
             },
-            {
-              to: paths.timeline,
-              icon: CalendarRange,
-              label: t("nav.timeline"),
-            },
-            {
-              to: paths.rentRoll,
-              icon: FileSpreadsheet,
-              label: t("nav.rentRoll"),
-            },
             ...(role === "ADMIN"
               ? [
                   {
-                    to: `${paths.users}?pending=true`,
+                    to: `${paths.users}?role=OWNER`,
                     icon: ShieldCheck,
                     label: t("dashboard.pendingOwners"),
                   },
