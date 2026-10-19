@@ -6,9 +6,13 @@ import {
   Bell,
   Check,
   Building2,
+  CalendarRange,
   ChevronDown,
   ClipboardCheck,
+  Download,
+  FileDown,
   FileSignature,
+  FileSpreadsheet,
   History,
   LayoutDashboard,
   Plus,
@@ -35,6 +39,7 @@ import { BenefitsSection, ProductTour } from "./LandingExtras";
 import {
   FlowSection,
   HeroPhoto,
+  ProblemSection,
   RolesSection,
   SpacesSection,
   TrustSection,
@@ -101,6 +106,10 @@ const FEATURE_ICONS = {
   maintenance: Wrench,
   notifications: Bell,
   dashboard: LayoutDashboard,
+  timeline: CalendarRange,
+  rentroll: FileSpreadsheet,
+  pdf: FileDown,
+  export: Download,
   roles: Users,
   audit: History,
   security: ShieldCheck,
@@ -282,6 +291,7 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <ProblemSection />
         <BenefitsSection />
         <ProductTour />
         <SpacesSection />

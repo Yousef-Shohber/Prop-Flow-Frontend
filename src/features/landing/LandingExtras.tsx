@@ -4,10 +4,10 @@ import {
   CheckCircle2,
   ClipboardCheck,
   DoorOpen,
+  FileText,
   Globe2,
   Images,
   LayoutDashboard,
-  Moon,
   Search,
   Users,
   Wrench,
@@ -24,7 +24,7 @@ import type { PropertyType } from "@/types/enums";
 
 /* ---------- benefits: what you get, stated without invented numbers ---------- */
 
-const BENEFIT_ICONS = [ClipboardCheck, Globe2, Users, Images, Moon, Bell];
+const BENEFIT_ICONS = [ClipboardCheck, Globe2, Users, Images, FileText, Bell];
 
 export function BenefitsSection() {
   const { t, raw } = useI18n();

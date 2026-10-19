@@ -97,7 +97,7 @@ export function TenantView() {
         />
       </div>
 
-      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
+      <div className="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-2 [&>*]:min-w-0">
         <Panel
           title={t("home.myLease")}
           to={paths.leases}
@@ -132,20 +132,34 @@ export function TenantView() {
                 <li key={l.id}>
                   <Link
                     to={paths.lease(l.id)}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-control border border-line p-4 transition-colors hover:bg-surface-2"
+                    className="flex flex-wrap items-start justify-between gap-x-3 gap-y-3 rounded-control border border-line p-4 transition-colors hover:bg-surface-2"
                   >
-                    <span>
-                      <span className="block font-semibold">
+                    <span className="min-w-0 flex-1 basis-40">
+                      <span className="block truncate font-semibold" dir="auto">
                         {t("units.unit", { n: l.unit.unitNumber })}
                       </span>
-                      <span className="block text-sm text-muted">
-                        {formatDate(l.startDate, lang)} →{" "}
-                        {formatDate(l.endDate, lang)}
+
+                      <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-sm text-muted">
+                        <span className="num whitespace-nowrap">
+                          {formatDate(l.startDate, lang)}
+                        </span>
+
+                        <span
+                          aria-hidden
+                          className="inline-block rtl:-scale-x-100"
+                        >
+                          →
+                        </span>
+
+                        <span className="num whitespace-nowrap">
+                          {formatDate(l.endDate, lang)}
+                        </span>
                       </span>
                     </span>
 
-                    <span className="text-end">
+                    <span className="shrink-0 text-end">
                       <StatusBadge kind="lease" value={l.status} />
+
                       {left !== null && left >= 0 && (
                         <span className="mt-1 block text-xs text-muted">
                           {t("home.daysLeft", {
@@ -154,6 +168,7 @@ export function TenantView() {
                         </span>
                       )}
                     </span>
+
                     <LeaseProgress
                       start={l.startDate.slice(0, 10)}
                       end={l.endDate.slice(0, 10)}
@@ -193,7 +208,7 @@ export function TenantView() {
                 title={t("units.unit", {
                   n: r.unit?.unitNumber ?? "—",
                 })}
-                meta={`${formatDate(r.startDate, lang)} → ${formatDate(r.endDate, lang)}`}
+                meta={`${formatDate(r.startDate, lang)} ${lang === "ar" ? "←" : "→"} ${formatDate(r.endDate, lang)}`}
                 end={<StatusBadge kind="rentalRequest" value={r.status} />}
               />
             ))}
@@ -201,7 +216,7 @@ export function TenantView() {
         </Panel>
       </div>
 
-      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
+      <div className="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-2 [&>*]:min-w-0">
         <Activity />
 
         <QuickActions

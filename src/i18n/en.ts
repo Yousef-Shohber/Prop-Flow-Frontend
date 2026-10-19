@@ -516,54 +516,73 @@ const en = {
     tourNav: "Product",
     heroPoints: [
       "Arabic and English",
-      "Light and dark themes",
-      "Role-based access",
+      "Light and dark mode",
+      "A screen for each role",
     ],
-    benefits: {
-      title: "What you get from the first day",
+    problem: {
+      title: "Where rentals usually get lost",
       intro:
-        "Less chasing, fewer spreadsheets, and one place everyone can check.",
+        "Many small portfolios run on chats, phone calls and spreadsheets. That works until it doesn't.",
       items: [
         [
-          "One shared flow",
-          "Requests, leases and repairs keep a visible status, so nobody has to ask where things stand.",
+          "Requests buried in chats",
+          "A message asking about a unit gets lost between family, friends and clients.",
         ],
         [
-          "Arabic and English, properly",
-          "A true right-to-left layout, localized dates and numbers, and a language switch that is always one click away.",
+          "Dates in a notebook",
+          "When a lease ends, or what rent was agreed, depends on someone remembering.",
         ],
         [
-          "The right view for each role",
-          "Tenants, owners, maintenance staff and administrators each get a workspace that shows only what they need.",
+          "Repairs reported by phone",
+          "A leak is reported on a call, and then nobody knows who is handling it.",
+        ],
+      ],
+      close:
+        "PropFlow keeps each of these in its own record, with a status and a history.",
+    },
+    benefits: {
+      title: "What changes when everything is in one place",
+      intro: "No more scrolling through chats to find a date or a number.",
+      items: [
+        [
+          "Everyone sees the same status",
+          "A request, a lease or a repair always shows where it stands, so nobody has to call and ask.",
         ],
         [
-          "Photos where they matter",
-          "Property, unit and repair photos live next to the work, from the first listing to the finished job.",
+          "Arabic and English",
+          "A real right-to-left layout, dates and numbers that suit each language, and a language switch on every page.",
         ],
         [
-          "Light, dark or your device",
-          "Pick the theme that is comfortable for long sessions, or let PropFlow follow your device.",
+          "A screen for each role",
+          "Tenants, owners, technicians and admins only see what concerns them.",
         ],
         [
-          "Updates that find you",
-          "In-app notifications tell each person about the changes that concern them, as they happen.",
+          "Photos next to the work",
+          "Photos of a unit, a listing or a broken pipe stay attached to the record they belong to.",
+        ],
+        [
+          "Documents ready to print",
+          "Any lease can be saved as a PDF summary with a stamp and signature lines, ready to sign.",
+        ],
+        [
+          "Notifications in the app",
+          "When a request is approved or a repair is assigned, the person concerned is told right away.",
         ],
       ],
     },
     tour: {
-      title: "See how it looks inside",
+      title: "A look inside",
       intro:
-        "Three of the screens you will use most. They are illustrations of the interface, not live data.",
+        "Three screens you will use often. They are illustrations, not real data.",
       tabs: ["Discover", "Dashboard", "Maintenance"],
       captions: [
-        "Search properties and units, then open the one you like.",
-        "Occupancy, leases and repairs at a glance for owners and admins.",
-        "Every repair moves through clear steps with a full history.",
+        "Search units by price, area and rooms, then open the one you want.",
+        "Occupancy, active leases and open repairs for your properties, on one screen.",
+        "Each repair moves through clear steps and keeps its history.",
       ],
     },
     footer: {
-      blurb:
-        "Property and rental management for tenants, owners and maintenance teams, from the first request to the fixed leak.",
+      blurb: "Rental management for tenants, owners and maintenance teams.",
       product: "Product",
       account: "Account",
       legal: "Legal",
@@ -584,23 +603,22 @@ const en = {
       },
     },
     heroText:
-      "PropFlow connects tenants, owners and maintenance teams in one clear flow, from the first rental request to the signed lease and the fixed leak.",
+      "PropFlow helps owners run their properties, and gives tenants a clear way to rent, follow their lease and report repairs. Everything is recorded from the first request.",
     ctaStart: "Create an account",
     ctaLogin: "Sign in",
-    legendTitle: "The building, as PropFlow sees it",
-    legendNote:
-      "Illustration. Each window is a unit and takes the colour of its status.",
-    whoTitle: "Built for everyone who keeps a rental running",
+    legendTitle: "Your building at a glance",
+    legendNote: "Illustration. Each window is a unit, coloured by its status.",
+    whoTitle: "Who uses PropFlow",
     tenants: "Tenants",
     tenantsText:
-      "Find an available unit, request to rent it, follow your lease and report problems with photos.",
-    owners: "Property owners",
+      "Find a free unit, send a rental request, follow your lease and report problems with photos.",
+    owners: "Owners",
     ownersText:
-      "Manage properties and units, review rental requests, run leases, assign repairs and see occupancy at a glance.",
+      "Manage your properties and units, answer requests, run your leases and assign repairs.",
     staff: "Maintenance staff",
     staffText:
-      "See only the jobs assigned to you. Start them, finish them and attach photos of the result.",
-    whoNav: "Who it is for",
+      "You only see the jobs assigned to you. Mark them started or done and add photos of the work.",
+    whoNav: "Who it's for",
     alt: {
       hero: "A modern residential building with a landscaped entrance",
       tower: "A tall residential tower against the sky",
@@ -609,147 +627,155 @@ const en = {
       commercial: "A street of commercial buildings",
     },
     spaces: {
-      note: "Sample imagery. After you sign in, listings come from verified owners and show their own photos.",
+      note: "Sample images. Once you sign in, listings show the real photos uploaded by their owners.",
       cta: "Create an account to browse",
-      title: "From a studio to a whole building",
+      title: "From a single apartment to a whole building",
       intro:
-        "A property is the container. The rentable thing is the unit, so one villa can have a single unit and a building can have many.",
+        "A property holds one or more units, and the unit is what gets rented. A villa can be one unit; a building can have fifty.",
       items: [
         [
           "Residential buildings",
-          "Many units under one roof, each with its own status, photos and lease.",
+          "Many units in one property, each with its own status, photos and lease.",
         ],
         [
-          "Villas and townhouses",
-          "A single-unit property is created in one step, with its unit.",
+          "Villas and houses",
+          "One property with one unit, created in a single step.",
         ],
         [
           "Studios and apartments",
-          "Specs, rent and availability that tenants can search and filter.",
+          "Rent, area and rooms that tenants can search and filter by.",
         ],
-        [
-          "Commercial spaces",
-          "Shops and offices are managed the same way as homes.",
-        ],
+        ["Shops and offices", "Managed the same way as homes."],
       ],
     },
     flow: {
-      title: "One flow, from first request to the fixed leak",
-      intro:
-        "Every step has a clear status that both sides can see, so nobody has to ask where things stand.",
+      title: "From the first request to a fixed repair",
+      intro: "Every step has a status that both sides can see.",
       steps: [
         [
-          "A tenant asks",
-          "A rental request tells the owner you are interested. It does not reserve the unit.",
+          "The tenant sends a request",
+          "It tells the owner you are interested. It does not reserve the unit.",
         ],
         [
           "The owner decides",
           "Approving a request creates a pending lease for that tenant.",
         ],
         [
-          "A lease is prepared",
-          "Dates and rent are copied from the unit, and overlapping leases are blocked.",
+          "The lease is prepared",
+          "Dates and rent come from the unit, and overlapping leases are blocked.",
         ],
         [
-          "The lease goes live",
-          "Activating it marks the unit as rented and closes competing requests.",
+          "The lease is activated",
+          "The unit becomes rented and competing requests are closed.",
         ],
         [
-          "Repairs stay tracked",
-          "Report, assign, start, complete and close, with photos and a timeline.",
+          "Repairs are tracked",
+          "Report, assign, start, finish and close, with photos and a timeline.",
         ],
       ],
-      note: "The statuses shown here are the ones used inside the product.",
+      note: "These are the same statuses you see inside the app.",
     },
     roles: {
-      sample: "Illustrative interface, not real data",
+      sample: "Illustration, not real data",
       adminName: "Administrators",
       adminText:
-        "Verify owners, manage accounts and review everything that changed in the system.",
+        "Verify owners, manage accounts and review every change made in the system.",
       tenant: [
-        "Browse available units with filters for bedrooms, area and price",
-        "Send and withdraw rental requests",
-        "Follow your lease and ask to extend it",
-        "Report repairs with photos and watch their progress",
+        "Search available units by bedrooms, area and price",
+        "Send a rental request, or withdraw it",
+        "Follow your lease and ask to renew it",
+        "Report repairs with photos and follow their progress",
       ],
       owner: [
         "Add properties and units with photos",
         "Approve or reject rental requests",
         "Create, activate, renew and end leases",
-        "Assign repairs and see occupancy and maintenance statistics",
+        "Assign repairs and see occupancy and maintenance numbers",
       ],
       staff: [
         "See only the jobs assigned to you",
-        "Start a job and complete it with a description and photos",
+        "Start a job and finish it with a note and photos",
         "Get notified when a job is assigned or cancelled",
       ],
       admin: [
-        "Verify owner accounts so their listings become visible",
-        "Activate, deactivate and change roles",
-        "Review a full audit trail with before and after values",
+        "Verify owners so their listings become visible",
+        "Activate or deactivate accounts and change roles",
+        "Read the audit log, with the values before and after each change",
       ],
     },
     trust: {
-      title: "Careful with access and accountability",
-      intro: "These are things the platform already does, not promises.",
+      title: "Who can see and change what",
+      intro: "How access and accountability work inside the app.",
       items: [
         [
-          "Safer sessions",
-          "Your access token lives in memory only, and the refresh token is kept in an httpOnly cookie that scripts cannot read.",
+          "Protected sessions",
+          "The access token stays in memory, and the refresh token sits in an httpOnly cookie that scripts cannot read.",
         ],
         [
           "Verified accounts",
-          "Email verification and one-time codes protect sign-up and password resets.",
+          "Sign-up and password reset use a one-time code sent by email.",
         ],
         [
-          "An audit trail",
-          "Administrators can see who changed what and when, including rent changes.",
+          "An audit log",
+          "Admins can see who changed what and when, including rent changes.",
         ],
         [
           "Role-based visibility",
-          "Every role sees only what it should, and the server enforces it on every request.",
+          "Each role sees only its own data, and the server checks this on every request.",
         ],
       ],
     },
-    featuresTitle: "What PropFlow actually does",
-    featuresIntro:
-      "No filler. These are the things the platform handles today.",
+    featuresTitle: "What you can do with it",
+    featuresIntro: "The main tools, one by one.",
     f: {
       units: [
         "Properties and units",
-        "Add properties and their units with photos, details and a clear availability status.",
+        "Add properties and their units with photos, details and availability.",
       ],
       requests: [
         "Rental requests",
-        "Tenants ask, owners decide. A request never reserves a unit by itself.",
+        "Tenants ask and owners decide. A request alone never reserves a unit.",
       ],
       leases: [
-        "Lease lifecycle",
-        "Pending, active, terminated or expired, with protection against overlapping leases.",
+        "Leases",
+        "Pending, active, expired or terminated, with overlapping leases blocked and a progress bar for the current term.",
       ],
       maintenance: [
-        "Maintenance workflow",
-        "Photos, assignment and a full status history from the first report to closing.",
+        "Maintenance",
+        "Photos, assignment and a full status history, from the report to closing.",
       ],
       notifications: [
-        "In-app notifications",
-        "Everyone hears about the changes that concern them, without chasing.",
+        "Notifications",
+        "Each person is told about the changes that concern them.",
       ],
       dashboard: [
         "Owner dashboard",
-        "Occupancy, leases and maintenance statistics for your own portfolio.",
+        "Occupancy, leases and maintenance numbers for your own portfolio.",
+      ],
+      timeline: [
+        "Occupancy timeline",
+        "See which units are rented, when each lease starts and ends, and which leases end in the next 30 days.",
+      ],
+      rentroll: [
+        "Rent roll",
+        "Every active lease with its monthly rent, the total and the occupancy rate. Print it or export it.",
+      ],
+      pdf: [
+        "Lease PDF",
+        "A one-page lease summary with all the details, a PropFlow stamp and signature lines.",
+      ],
+      export: [
+        "CSV export",
+        "Download lists of units, properties, requests and more, using your current filters.",
       ],
       roles: [
-        "Role-based access",
-        "Tenants, owners, maintenance staff and administrators each see only what they should.",
+        "Roles",
+        "Tenants, owners, technicians and admins each have their own screens.",
       ],
-      audit: [
-        "Audit trail",
-        "Administrators can review who changed what and when.",
-      ],
+      audit: ["Audit log", "Admins can review who changed what and when."],
       security: [
-        "Verified accounts",
-        "Email verification and password reset keep accounts yours.",
+        "Account security",
+        "Email verification and password reset keep accounts safe.",
       ],
     },
     howTitle: "How it works",
@@ -758,26 +784,26 @@ const en = {
     tenantSteps: [
       "Browse available units",
       "Send a rental request",
-      "The owner reviews and approves",
+      "Wait for the owner's decision",
       "Your lease is activated",
-      "File maintenance requests whenever needed",
+      "Report repairs whenever something breaks",
     ],
     ownerSteps: [
       "Add your property and its units",
       "Receive rental requests",
       "Approve or reject each one",
       "Activate the lease",
-      "Assign and follow maintenance",
+      "Assign repairs and follow them to the end",
     ],
-    faqTitle: "Questions people ask first",
+    faqTitle: "Common questions",
     faq: [
       [
         "Who can create an account?",
-        "Tenants and property owners can register themselves. Maintenance staff accounts are created by an administrator. An owner\u2019s listings become visible to tenants once an administrator has verified the account.",
+        "Tenants and owners can sign up on their own. Maintenance staff accounts are created by an admin. An owner's listings are shown to tenants only after an admin verifies the account.",
       ],
       [
-        "Why do I need to verify my email?",
-        "It proves the address is yours. We send a 6-digit code that stays valid for 10 minutes, and the same flow protects password resets.",
+        "Why do I have to confirm my email?",
+        "To prove the address is yours. We send a 6-digit code that is valid for 10 minutes, and the same flow is used to reset a password.",
       ],
       [
         "Does a rental request reserve the unit?",
@@ -785,16 +811,24 @@ const en = {
       ],
       [
         "How do maintenance requests work?",
-        "A tenant with an active lease reports a problem with photos. The owner assigns it to a technician, who starts and completes it. Every step is recorded in a timeline.",
+        "A tenant with an active lease reports the problem with photos. The owner assigns it to a technician, who starts and finishes the job. Every step is recorded in a timeline.",
       ],
       [
         "Can I sign in with Google?",
-        "Yes, when it is enabled for this site. The first time, you choose whether you are a tenant or an owner.",
+        "Yes, when it is enabled on this site. The first time, you choose whether you are a tenant or an owner.",
+      ],
+      [
+        "Can I print a lease?",
+        "Yes. Every lease has a PDF summary with the parties, the unit, the term, the rent, a stamp and signature lines. You print it or save it as a PDF from your browser.",
+      ],
+      [
+        "Does PropFlow collect the rent?",
+        "No. It records leases, rent amounts and dates, but it does not process payments.",
       ],
     ],
-    ctaTitle: "Ready to see your rentals in one place?",
+    ctaTitle: "Ready to put your rentals in one place?",
     ctaText:
-      "Create your account in a minute. Tenants and owners are both welcome.",
+      "Create an account in a minute. Tenants and owners are both welcome.",
     footerNote: "All rights reserved.",
   },
 

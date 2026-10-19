@@ -1,9 +1,12 @@
 import { useState } from "react";
 import {
   ArrowRight,
+  CalendarClock,
   CheckCircle2,
   Eye,
   KeyRound,
+  MessageSquareText,
+  PhoneCall,
   ScrollText,
   ShieldCheck,
   UserCheck,
@@ -19,6 +22,59 @@ import { Tag } from "@/components/ui/Misc";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes/paths";
+
+/* ---------- the problem: how small portfolios usually run ---------- */
+
+export function ProblemSection() {
+  const { t, raw } = useI18n();
+  const items = raw<string[][]>("landing.problem.items");
+  const icons = [MessageSquareText, CalendarClock, PhoneCall];
+  return (
+    <section className="py-20" aria-labelledby="problem-title">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="max-w-2xl">
+          <h2
+            id="problem-title"
+            data-reveal
+            className="text-3xl font-bold sm:text-4xl"
+          >
+            {t("landing.problem.title")}
+          </h2>
+          <p data-reveal className="mt-4 text-muted">
+            {t("landing.problem.intro")}
+          </p>
+        </div>
+        <ul className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+          {items.map(([title, text], i) => {
+            const Icon = icons[i] ?? MessageSquareText;
+            return (
+              <li
+                key={title}
+                data-reveal
+                className="rounded-card border border-line bg-surface p-6"
+              >
+                <span className="flex size-11 items-center justify-center rounded-xl bg-[var(--red-bg)] text-[var(--red-fg)]">
+                  <Icon className="size-5" aria-hidden />
+                </span>
+                <h3 className="mt-4 text-base font-semibold">{title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">
+                  {text}
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+        <p
+          data-reveal
+          className="mt-8 flex items-center gap-3 text-base font-medium"
+        >
+          <span aria-hidden className="h-px w-10 shrink-0 bg-accent" />
+          {t("landing.problem.close")}
+        </p>
+      </div>
+    </section>
+  );
+}
 
 /* ---------- gallery: the kinds of space PropFlow manages ---------- */
 
