@@ -1395,7 +1395,7 @@ const en = {
     notOwner: "Only owner accounts can be verified.",
     awaiting: "Awaiting verification",
     pendingHint:
-      "Filter by Owner and scan the Verified column to find owners waiting for approval.",
+      "Use “Awaiting verification” to list owners waiting for approval, then switch on Verified owner for the ones you approve.",
     roleChangeNote: "Changing a role resets owner verification.",
     status: "Account",
     deactivated: "Deactivated",
@@ -1598,6 +1598,7 @@ const en = {
     end90: "Ending in 90 days",
     daysLeft: "Days left",
     total: "Total monthly rent",
+    approvedBy: "Approved by (name and signature)",
     emptyTitle: "No active leases",
     emptyText: "Active leases appear here once a lease is activated.",
   },
@@ -1785,6 +1786,8 @@ const en = {
     month: "month",
     created: "Created on",
     signatures: "Signatures",
+    renewal: "Pending renewal request",
+    renewalEnd: "Requested end date",
     date: "Date",
     disclaimer:
       "This document summarizes the lease record kept in PropFlow on the date shown. It becomes binding only when signed by both parties. The terms agreed between the parties apply.",

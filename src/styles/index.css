@@ -421,7 +421,13 @@
     display: none !important;
   }
   html,
-  body {
+  html.dark {
+    color-scheme: light !important;
+  }
+  html,
+  body,
+  #root,
+  #root > div {
     background: #fff !important;
     color: #111 !important;
   }

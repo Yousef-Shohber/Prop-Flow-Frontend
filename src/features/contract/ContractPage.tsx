@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, FileDown } from "lucide-react";
-import { useEffect, useId, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
+import { Stamp } from "@/components/ui/Stamp";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { leasesApi } from "@/api/leases";
 import { propertiesApi } from "@/api/properties";
+import { renewalsApi } from "@/api/renewals";
 import { unitsApi } from "@/api/units";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Misc";
@@ -25,104 +27,6 @@ const INK = "#17202e";
 const MUTED = "#566074";
 const LINE = "#d9ddd5";
 const NAVY = "#1d2b5f";
-
-/** Round seal carrying the site name. Pure SVG so it prints sharply and ignores dark mode. */
-function Stamp({ date, status }: { date: string; status: string }) {
-  const id = useId().replace(/:/g, "");
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      width="132"
-      height="132"
-      role="img"
-      aria-label="PropFlow"
-      style={{ transform: "rotate(-9deg)" }}
-    >
-      <defs>
-        <path
-          id={`ring-${id}`}
-          d="M100,100 m-70,0 a70,70 0 1,1 140,0 a70,70 0 1,1 -140,0"
-        />
-      </defs>
-      <circle
-        cx="100"
-        cy="100"
-        r="94"
-        fill="none"
-        stroke={NAVY}
-        strokeWidth="4"
-      />
-      <circle
-        cx="100"
-        cy="100"
-        r="87"
-        fill="none"
-        stroke={NAVY}
-        strokeWidth="1.2"
-      />
-      <circle
-        cx="100"
-        cy="100"
-        r="52"
-        fill="none"
-        stroke={NAVY}
-        strokeWidth="1.2"
-      />
-      <text
-        fontSize="14.5"
-        fontWeight="700"
-        letterSpacing="3.2"
-        fill={NAVY}
-        fontFamily="Arial, Helvetica, sans-serif"
-      >
-        <textPath href={`#ring-${id}`} startOffset="0">
-          PROPFLOW • PROPERTY MANAGEMENT •
-        </textPath>
-      </text>
-      <path
-        d="M100 68 123 87v26a4 4 0 0 1-4 4H81a4 4 0 0 1-4-4V87Z"
-        fill="none"
-        stroke={NAVY}
-        strokeWidth="2.4"
-        strokeLinejoin="round"
-      />
-      <text
-        x="100"
-        y="140"
-        textAnchor="middle"
-        fontSize="19"
-        fontWeight="800"
-        fill={NAVY}
-        fontFamily="Arial, Helvetica, sans-serif"
-        letterSpacing="1"
-      >
-        PropFlow
-      </text>
-      <text
-        x="100"
-        y="157"
-        textAnchor="middle"
-        fontSize="10"
-        fontWeight="700"
-        fill={NAVY}
-        fontFamily="Arial, Helvetica, sans-serif"
-        letterSpacing="2"
-      >
-        {status}
-      </text>
-      <text
-        x="100"
-        y="169"
-        textAnchor="middle"
-        fontSize="9"
-        fill={NAVY}
-        fontFamily="Arial, Helvetica, sans-serif"
-      >
-        {date}
-      </text>
-    </svg>
-  );
-}
 
 function Section({
   n,
@@ -191,6 +95,12 @@ export default function ContractPage() {
     queryFn: () => unitsApi.get(l!.unitId),
     enabled: !!l,
   });
+  const renewal = useQuery({
+    queryKey: ["lease-renewals", "pending", id],
+    queryFn: () =>
+      renewalsApi.list({ leaseId: id, status: "PENDING", limit: 1 }),
+    enabled: l?.status === "ACTIVE",
+  });
   const tenants = useAllTenants(manager);
   const users = useAllUsers(role === "ADMIN");
 
@@ -223,6 +133,7 @@ export default function ContractPage() {
   }
   if (!l || loading) return <LoadingSkeleton />;
 
+  const pendingRenewal = renewal.data?.data[0];
   const p = property.data;
   const u = unit.data;
   const start = l.startDate.slice(0, 10);
@@ -441,8 +352,33 @@ export default function ContractPage() {
           />
         </Section>
 
+        {pendingRenewal && (
+          <Section n={4} title={t("contract.renewal")}>
+            <Rows
+              items={[
+                {
+                  label: t("contract.renewalEnd"),
+                  value: (
+                    <span className="num">
+                      {formatDate(pendingRenewal.requestedEndDate, lang)}
+                    </span>
+                  ),
+                },
+                {
+                  label: t("leases.status"),
+                  value: label("lrr", pendingRenewal.status),
+                },
+                {
+                  label: t("leases.notes"),
+                  value: pendingRenewal.message ?? "",
+                },
+              ]}
+            />
+          </Section>
+        )}
+
         {l.notes && (
-          <Section n={4} title={t("leases.notes")}>
+          <Section n={pendingRenewal ? 5 : 4} title={t("leases.notes")}>
             <p
               className="whitespace-pre-wrap rounded-lg border p-3 text-[0.85rem] leading-relaxed"
               style={{ borderColor: LINE }}
@@ -453,7 +389,10 @@ export default function ContractPage() {
           </Section>
         )}
 
-        <Section n={l.notes ? 5 : 4} title={t("contract.signatures")}>
+        <Section
+          n={4 + (pendingRenewal ? 1 : 0) + (l.notes ? 1 : 0)}
+          title={t("contract.signatures")}
+        >
           <div
             className="grid items-end gap-6 sm:grid-cols-[1fr_auto_1fr]"
             style={{ breakInside: "avoid" }}
