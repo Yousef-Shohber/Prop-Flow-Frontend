@@ -258,12 +258,12 @@ export default function PropertyFormPage() {
               error={e("address")}
               {...register("address")}
             />
-            <Input
+            {/* <Input
               label={t("properties.country")}
               optional
               error={e("country")}
               {...register("country")}
-            />
+            /> */}
             <Textarea
               wrapperClassName="sm:col-span-2"
               label={t("properties.description")}
