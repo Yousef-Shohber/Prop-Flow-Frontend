@@ -515,9 +515,9 @@ const en = {
   landing: {
     tourNav: "Product",
     heroPoints: [
-      "Arabic and English",
-      "Light and dark mode",
-      "A screen for each role",
+      "End-to-End Rental Management",
+      "Real-Time Unit Status",
+      "Organized Maintenance Requests",
     ],
     problem: {
       title: "Where rentals usually get lost",
