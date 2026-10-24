@@ -92,6 +92,7 @@ export function makeSchemas(t: TFn) {
       email,
       password,
       role: z.enum(["TENANT", "OWNER"]),
+      acceptTerms: z.boolean().refine((v) => v === true, t("v.terms")),
     }),
     verify: z.object({ email, otp: z.string().regex(/^\d{6}$/, t("v.otp")) }),
     forgot: z.object({ email }),

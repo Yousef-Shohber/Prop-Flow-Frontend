@@ -20,6 +20,7 @@ const VerifyEmail = L(() => import("@/features/auth/VerifyEmailPage"));
 const Forgot = L(() => import("@/features/auth/ForgotPasswordPage"));
 const Reset = L(() => import("@/features/auth/ResetPasswordPage"));
 const ChooseRole = L(() => import("@/features/auth/ChooseRolePage"));
+const About = L(() => import("@/features/misc/AboutPage"));
 const Legal = L(() => import("@/features/misc/LegalPage"));
 const Home = L(() => import("@/features/home/HomePage"));
 const Dashboard = L(() => import("@/features/dashboard/DashboardPage"));
@@ -108,6 +109,7 @@ export default function App() {
         <Route path={paths.resetPassword} element={<Reset />} />
         <Route path={paths.terms} element={<Legal kind="terms" />} />
         <Route path={paths.privacy} element={<Legal kind="privacy" />} />
+        <Route path={paths.about} element={<About />} />
         <Route path={paths.help} element={<HelpGate />}>
           <Route index element={<Help />} />
         </Route>
@@ -126,6 +128,7 @@ export default function App() {
                 path="/properties/:propertyId/units/new"
                 element={<UnitForm />}
               />
+              <Route path="/units/new" element={<UnitForm />} />
               <Route path="/units/:id/edit" element={<UnitForm />} />
               <Route path="/leases/new" element={<LeaseNew />} />
               <Route path="/leases/:id/edit" element={<LeaseEdit />} />

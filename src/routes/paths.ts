@@ -11,6 +11,7 @@ export const paths = {
   chooseRole: "/choose-role",
   terms: "/terms",
   privacy: "/privacy",
+  about: "/about",
   forbidden: "/403",
   home: "/home",
   dashboard: "/dashboard",
@@ -20,6 +21,8 @@ export const paths = {
   propertyEdit: (id: string) => `/properties/${id}/edit`,
   unitNew: (propertyId: string) => `/properties/${propertyId}/units/new`,
   units: "/units",
+  unitCreate: (propertyId?: string) =>
+    propertyId ? `/units/new?propertyId=${propertyId}` : "/units/new",
   unit: (id: string) => `/units/${id}`,
   unitEdit: (id: string) => `/units/${id}/edit`,
   rentalRequests: "/rental-requests",

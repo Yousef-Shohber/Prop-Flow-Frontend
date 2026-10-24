@@ -1,12 +1,17 @@
+import { Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PublicFooter, PublicHeader } from "@/components/layout/PublicLayout";
-import { Banner } from "@/components/ui/Misc";
 import { useI18n } from "@/i18n";
+import { env } from "@/lib/env";
+import { paths } from "@/routes/paths";
 
-/** Legal pages are placeholders on purpose: the real text must come from the business (spec §27). */
+type LegalDoc = { intro: string; sections: [string, string[]][] };
+
+/** Terms of use and privacy policy. The text lives in the dictionaries under `legal.terms` / `legal.privacy`. */
 export default function LegalPage({ kind }: { kind: "terms" | "privacy" }) {
   const { t, raw } = useI18n();
-  const sections = raw<string[]>("legal.sections");
+  const doc = raw<LegalDoc>(`legal.${kind}`);
+  const last = doc.sections.length - 1;
   return (
     <div className="flex min-h-dvh flex-col">
       <PublicHeader />
@@ -15,35 +20,52 @@ export default function LegalPage({ kind }: { kind: "terms" | "privacy" }) {
           {kind === "terms" ? t("legal.termsTitle") : t("legal.privacyTitle")}
         </h1>
         <p className="mt-2 text-sm text-faint">{t("legal.updated")}</p>
-        <Banner tone="amber" className="mt-6">
-          {t("legal.placeholder")}
-        </Banner>
-        <div className="mt-8 space-y-7">
-          {sections.map((s, i) => (
-            <section key={s}>
-              <h2 className="mb-2 text-lg font-semibold">
-                <span className="num text-faint">{i + 1}.</span> {s}
+        <p className="mt-6 text-base leading-relaxed text-muted">{doc.intro}</p>
+
+        <div className="mt-10 space-y-8">
+          {doc.sections.map(([title, paragraphs], i) => (
+            <section key={title} aria-labelledby={`legal-${kind}-${i}`}>
+              <h2
+                id={`legal-${kind}-${i}`}
+                className="mb-3 text-lg font-semibold"
+              >
+                <span className="num text-faint">{i + 1}.</span> {title}
               </h2>
-              <div className="space-y-2" aria-hidden>
-                <div
-                  className="skeleton h-3.5 w-full"
-                  style={{ animation: "none" }}
-                />
-                <div
-                  className="skeleton h-3.5 w-11/12"
-                  style={{ animation: "none" }}
-                />
-                <div
-                  className="skeleton h-3.5 w-2/3"
-                  style={{ animation: "none" }}
-                />
+              <div className="space-y-3 text-sm leading-relaxed text-muted">
+                {paragraphs.map((p) => (
+                  <p key={p}>{p}</p>
+                ))}
               </div>
+              {i === last && (
+                <p className="mt-4 text-sm">
+                  {env.supportEmail ? (
+                    <a
+                      href={`mailto:${env.supportEmail}`}
+                      className="tap-area inline-flex items-center gap-2 font-medium underline underline-offset-4"
+                    >
+                      <Mail className="size-4" aria-hidden />
+                      <span dir="ltr">{env.supportEmail}</span>
+                    </a>
+                  ) : (
+                    <Link
+                      to={`${paths.about}#contact`}
+                      className="tap-area font-medium underline underline-offset-4"
+                    >
+                      {t("legal.contactHelp")}
+                    </Link>
+                  )}
+                </p>
+              )}
             </section>
           ))}
         </div>
-        <p className="mt-10 text-sm">
-          <Link to="/" className="tap-area font-medium underline underline-offset-4">
-            {t("nav.dashboard")}
+
+        <p className="mt-12 border-t border-line pt-6 text-sm">
+          <Link
+            to="/"
+            className="tap-area font-medium underline underline-offset-4"
+          >
+            {t("legal.back")}
           </Link>
         </p>
       </main>

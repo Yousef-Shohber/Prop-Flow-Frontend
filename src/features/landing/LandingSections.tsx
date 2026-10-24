@@ -223,16 +223,6 @@ export function FlowSection() {
 
 /* ---------- roles: what each person sees (illustrative interface, no real data) ---------- */
 
-function Bar({ w }: { w: string }) {
-  return (
-    <span
-      aria-hidden
-      className="block h-2.5 rounded-full bg-surface-3"
-      style={{ width: w }}
-    />
-  );
-}
-
 function PreviewFrame({
   children,
   label,
@@ -255,12 +245,22 @@ function PreviewFrame({
   );
 }
 
+function Lines({ title, meta }: { title: string; meta: string }) {
+  return (
+    <div className="min-w-0">
+      <p className="truncate text-sm font-semibold">{title}</p>
+      <p className="mt-0.5 truncate text-xs text-muted">{meta}</p>
+    </div>
+  );
+}
+
 function RolePreview({
   role,
 }: {
   role: "tenant" | "owner" | "staff" | "admin";
 }) {
-  const { t } = useI18n();
+  const { t, raw } = useI18n();
+  const demo = raw<Record<string, string[] | string[][]>>("landing.demo");
   const label = t("landing.roles.sample");
   const fakeBtn =
     "pointer-events-none inline-flex h-8 items-center rounded-control px-3 text-xs font-medium";
@@ -278,10 +278,10 @@ function RolePreview({
             key={i}
             className="flex items-center justify-between gap-4 rounded-control border border-line p-3"
           >
-            <div className="w-1/2 space-y-2">
-              <Bar w="70%" />
-              <Bar w="45%" />
-            </div>
+            <Lines
+              title={(demo.tenant as string[][])[i][0]}
+              meta={(demo.tenant as string[][])[i][1]}
+            />
             <StatusBadge kind={k} value={v} />
           </div>
         ))}
@@ -295,10 +295,10 @@ function RolePreview({
             key={i}
             className="flex flex-wrap items-center justify-between gap-3 rounded-control border border-line p-3"
           >
-            <div className="w-2/5 space-y-2">
-              <Bar w="75%" />
-              <Bar w="50%" />
-            </div>
+            <Lines
+              title={(demo.owner as string[][])[i][0]}
+              meta={(demo.owner as string[][])[i][1]}
+            />
             <div className="flex gap-2">
               <span className={cn(fakeBtn, "bg-primary text-on-primary")}>
                 {t("rr.approve")}
@@ -323,8 +323,10 @@ function RolePreview({
             <StatusBadge kind="priority" value="URGENT" />
             <StatusBadge kind="maintenance" value="ASSIGNED" />
           </div>
-          <Bar w="80%" />
-          <Bar w="55%" />
+          <Lines
+            title={(demo.staff as string[])[0]}
+            meta={(demo.staff as string[])[1]}
+          />
           <span className={cn(fakeBtn, "bg-primary text-on-primary")}>
             {t("mnt.start")}
           </span>
@@ -334,10 +336,10 @@ function RolePreview({
   return (
     <PreviewFrame label={label}>
       <div className="flex items-center justify-between gap-4 rounded-control border border-line p-3">
-        <div className="w-1/2 space-y-2">
-          <Bar w="65%" />
-          <Bar w="40%" />
-        </div>
+        <Lines
+          title={(demo.admin as string[])[0]}
+          meta={(demo.admin as string[])[1]}
+        />
         <div className="flex items-center gap-3">
           <Tag>{t("e.role.OWNER")}</Tag>
           <Switch checked label="" onCheckedChange={() => {}} disabled />

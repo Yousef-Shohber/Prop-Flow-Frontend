@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { DoorOpen } from "lucide-react";
+import { DoorOpen, Plus } from "lucide-react";
 import { propertiesApi } from "@/api/properties";
 import { unitsApi } from "@/api/units";
+import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Misc";
 import { FilterBar, type FilterField } from "@/components/ui/FilterBar";
 import { ExportButton } from "@/components/ui/ExportButton";
@@ -19,6 +20,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePendingRequestMap } from "@/hooks/queries";
 import { useListParams } from "@/hooks/useListParams";
 import { useEnumLabel, useI18n } from "@/i18n";
+import { paths } from "@/routes/paths";
 import { UnitStatus } from "@/types/enums";
 import { UnitCard } from "./UnitBits";
 import { UnitsTable } from "./UnitsTable";
@@ -112,6 +114,13 @@ export default function UnitsPage() {
       icon={DoorOpen}
       title={t("units.noUnits")}
       description={t("units.noUnitsText")}
+      action={
+        !isTenant && (
+          <Button to={paths.unitCreate()} icon={<Plus className="size-4" />}>
+            {t("units.new")}
+          </Button>
+        )
+      }
     />
   );
   const sortKey =
@@ -127,42 +136,52 @@ export default function UnitsPage() {
         title={t("units.title")}
         subtitle={isTenant ? t("units.subTenant") : t("units.subOwner")}
         actions={
-          <ExportButton
-            name="units"
-            disabled={!q.data?.meta.total}
-            load={async () => {
-              const { page: _p, limit: _l, ...filters } = params;
-              const [{ rows, truncated }, names] = await Promise.all([
-                fetchAll((page, limit) =>
-                  unitsApi.list({ ...filters, page, limit }),
-                ),
-                loadPropertyNames(),
-              ]);
-              return {
-                truncated,
-                headers: [
-                  t("export.col.unit"),
-                  t("export.col.property"),
-                  t("export.col.floor"),
-                  t("export.col.area"),
-                  t("export.col.bedrooms"),
-                  t("export.col.bathrooms"),
-                  t("export.col.rent"),
-                  t("export.col.status"),
-                ],
-                rows: rows.map((u) => [
-                  u.unitNumber,
-                  names.get(u.propertyId) ?? "",
-                  u.floor,
-                  u.area,
-                  u.bedrooms,
-                  u.bathrooms,
-                  u.rentAmount,
-                  label("unit", u.status),
-                ]),
-              };
-            }}
-          />
+          <>
+            <ExportButton
+              name="units"
+              disabled={!q.data?.meta.total}
+              load={async () => {
+                const { page: _p, limit: _l, ...filters } = params;
+                const [{ rows, truncated }, names] = await Promise.all([
+                  fetchAll((page, limit) =>
+                    unitsApi.list({ ...filters, page, limit }),
+                  ),
+                  loadPropertyNames(),
+                ]);
+                return {
+                  truncated,
+                  headers: [
+                    t("export.col.unit"),
+                    t("export.col.property"),
+                    t("export.col.floor"),
+                    t("export.col.area"),
+                    t("export.col.bedrooms"),
+                    t("export.col.bathrooms"),
+                    t("export.col.rent"),
+                    t("export.col.status"),
+                  ],
+                  rows: rows.map((u) => [
+                    u.unitNumber,
+                    names.get(u.propertyId) ?? "",
+                    u.floor,
+                    u.area,
+                    u.bedrooms,
+                    u.bathrooms,
+                    u.rentAmount,
+                    label("unit", u.status),
+                  ]),
+                };
+              }}
+            />
+            {!isTenant && (
+              <Button
+                to={paths.unitCreate(f.propertyId || undefined)}
+                icon={<Plus className="size-4" />}
+              >
+                {t("units.new")}
+              </Button>
+            )}
+          </>
         }
       />
       <div className="mb-5 space-y-4">

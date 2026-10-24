@@ -71,16 +71,6 @@ export function BenefitsSection() {
 
 /* ---------- product tour: three illustrative screens (never real data) ---------- */
 
-function Bar({ w, className = "" }: { w: string; className?: string }) {
-  return (
-    <span
-      aria-hidden
-      className={`block h-2.5 rounded-full bg-surface-3 ${className}`}
-      style={{ width: w }}
-    />
-  );
-}
-
 function Frame({
   caption,
   children,
@@ -114,7 +104,8 @@ function Frame({
 const SHOW: PropertyType[] = ["BUILDING", "VILLA", "STUDIO"];
 
 function DiscoverMock() {
-  const { t } = useI18n();
+  const { t, raw } = useI18n();
+  const demo = raw<string[][]>("landing.demo.discover");
   const label = useEnumLabel();
   return (
     <>
@@ -128,7 +119,7 @@ function DiscoverMock() {
         </span>
       </div>
       <ul className="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
-        {SHOW.map((v) => (
+        {SHOW.map((v, i) => (
           <li
             key={v}
             className="overflow-hidden rounded-card border border-line bg-surface"
@@ -139,10 +130,17 @@ function DiscoverMock() {
               alt=""
               className="aspect-[4/3] w-full"
             />
-            <div className="space-y-2 p-3">
-              <span className="text-xs font-semibold">{label("ptype", v)}</span>
-              <Bar w="75%" />
-              <Bar w="50%" />
+            <div className="space-y-1 p-3">
+              <span className="block text-[0.6875rem] text-faint">
+                {label("ptype", v)}
+              </span>
+              <p className="truncate text-xs font-semibold">{demo[i][0]}</p>
+              <p className="truncate text-[0.6875rem] text-muted">
+                {demo[i][1]}
+              </p>
+              <p className="truncate text-xs font-semibold text-accent-ink dark:text-accent">
+                {demo[i][2]}
+              </p>
             </div>
           </li>
         ))}
@@ -151,8 +149,12 @@ function DiscoverMock() {
   );
 }
 
+const OCCUPANCY_ROWS = ["RENTED", "AVAILABLE", "MAINTENANCE"] as const;
+
 function DashboardMock() {
-  const { t } = useI18n();
+  const { t, raw } = useI18n();
+  const values = raw<string[]>("landing.demo.stats");
+  const counts = raw<Record<string, string>>("landing.demo.counts");
   const stats: [typeof Building2, string][] = [
     [Building2, t("dashboard.totalProperties")],
     [DoorOpen, t("dashboard.totalUnits")],
@@ -162,14 +164,14 @@ function DashboardMock() {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_1.1fr]">
       <div className="grid grid-cols-2 gap-3">
-        {stats.map(([Icon, text]) => (
+        {stats.map(([Icon, text], i) => (
           <div
             key={text}
             className="space-y-2 rounded-card border border-line bg-surface p-3.5"
           >
             <Icon className="size-4 text-accent-ink" aria-hidden />
             <p className="truncate text-xs text-muted">{text}</p>
-            <Bar w="40%" className="h-4" />
+            <p className="num font-display text-xl font-bold">{values[i]}</p>
           </div>
         ))}
       </div>
@@ -196,14 +198,30 @@ function DashboardMock() {
             strokeWidth="11"
             strokeLinecap="round"
             strokeDasharray="251"
-            strokeDashoffset="85"
+            strokeDashoffset="63"
           />
         </svg>
-        <div className="min-w-0 flex-1 space-y-2.5">
-          <p className="text-xs font-semibold">{t("dashboard.occupancy")}</p>
-          <Bar w="90%" />
-          <Bar w="70%" />
-          <Bar w="55%" />
+        <div className="min-w-0 flex-1 space-y-2">
+          <p className="text-xs font-semibold">
+            {t("dashboard.occupancy")}{" "}
+            <span className="num text-accent-ink dark:text-accent">
+              {t("landing.demo.occupancyValue")}
+            </span>
+          </p>
+          <ul className="space-y-1.5">
+            {OCCUPANCY_ROWS.map((k) => (
+              <li
+                key={k}
+                className="flex items-center justify-between gap-3 text-xs text-muted"
+              >
+                <span className="truncate">{t(`e.unit.${k}`)}</span>
+                <span className="num font-semibold text-ink">{counts[k]}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[0.6875rem] text-faint">
+            {t("landing.demo.occupancyNote")}
+          </p>
         </div>
       </div>
     </div>
@@ -211,13 +229,15 @@ function DashboardMock() {
 }
 const STEPS = ["OPEN", "ASSIGNED", "IN_PROGRESS", "RESOLVED"] as const;
 function MaintenanceMock() {
+  const { raw } = useI18n();
+  const steps = raw<string[][]>("landing.demo.repair");
   return (
     <ol className="relative space-y-3 ps-8">
       <span
         aria-hidden
         className="absolute inset-y-2 start-[0.6rem] w-px bg-line-strong"
       />
-      {STEPS.map((s) => (
+      {STEPS.map((s, i) => (
         <li
           key={s}
           className="relative flex items-center justify-between gap-4 rounded-card border border-line bg-surface p-3.5"
@@ -226,9 +246,9 @@ function MaintenanceMock() {
             aria-hidden
             className="absolute -start-[1.6rem] top-1/2 size-3 -translate-y-1/2 rounded-full border-2 border-bg bg-accent"
           />
-          <div className="w-1/2 space-y-2">
-            <Bar w="75%" />
-            <Bar w="45%" />
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold">{steps[i][0]}</p>
+            <p className="mt-0.5 truncate text-xs text-muted">{steps[i][1]}</p>
           </div>
           <StatusBadge kind="maintenance" value={s} />
         </li>

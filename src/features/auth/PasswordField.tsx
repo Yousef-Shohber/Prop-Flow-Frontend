@@ -3,7 +3,6 @@ import { forwardRef, useState, type InputHTMLAttributes } from "react";
 import { Input } from "@/components/ui/Field";
 import { useT } from "@/i18n";
 import { passwordStrength } from "@/lib/schemas";
-import { cn } from "@/lib/utils";
 
 type Props = Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
   label: string;
@@ -28,27 +27,30 @@ export const PasswordField = forwardRef<HTMLInputElement, Props>(
     ];
     return (
       <div>
-        <div className="relative">
-          <Input
-            ref={ref}
-            type={shown ? "text" : "password"}
-            dir="ltr"
-            className="pe-11 text-start"
-            {...props}
-          />
-          <button
-            type="button"
-            onClick={() => setShown((s) => !s)}
-            aria-pressed={shown}
-            aria-label={shown ? "Hide password" : "Show password"}
-            className={cn(
-              "absolute end-2 flex size-8 items-center justify-center rounded-md text-faint hover:bg-surface-2 hover:text-ink",
-              "top-[2rem]",
-            )}
-          >
-            {shown ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-          </button>
-        </div>
+        <Input
+          ref={ref}
+          type={shown ? "text" : "password"}
+          dir="ltr"
+          // the input is forced LTR, so the eye and its padding both use the physical right side
+          className="pr-12 text-start"
+          endAdornmentClassName="right-2"
+          endAdornment={
+            <button
+              type="button"
+              onClick={() => setShown((s) => !s)}
+              aria-pressed={shown}
+              aria-label={shown ? "Hide password" : "Show password"}
+              className="flex size-8 items-center justify-center rounded-md text-faint hover:bg-surface-2 hover:text-ink"
+            >
+              {shown ? (
+                <EyeOff className="size-4" />
+              ) : (
+                <Eye className="size-4" />
+              )}
+            </button>
+          }
+          {...props}
+        />
         {showStrength && String(props.value ?? "").length > 0 && (
           <div className="mt-2" aria-live="polite">
             <div className="flex gap-1.5" aria-hidden>

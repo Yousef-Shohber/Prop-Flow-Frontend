@@ -1,9 +1,11 @@
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useT } from "@/i18n";
+import { env } from "@/lib/env";
 import { ROLE_HOME, paths } from "@/routes/paths";
 import { Button } from "../ui/Button";
 import { Logo } from "./Logo";
+import { waDigits, waLink } from "./ContactLinks";
 import { LangToggle, ThemeToggle } from "./Toggles";
 
 export function PublicHeader({ transparent }: { transparent?: boolean }) {
@@ -62,7 +64,7 @@ export function PublicFooter() {
   const head = "mb-3 text-sm font-semibold";
   return (
     <footer className="border-t border-line bg-surface-2/40">
-      <div className="mx-auto grid grid-cols-1 max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div className="mx-auto grid grid-cols-1 max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
         <div className="max-w-xs">
           <Logo />
           <p className="mt-4 text-sm leading-relaxed text-muted">
@@ -117,6 +119,40 @@ export function PublicFooter() {
                   </Link>
                 </li>
               </>
+            )}
+          </ul>
+        </nav>
+        <nav aria-label={t("landing.footer.company")}>
+          <h2 className={head}>{t("landing.footer.company")}</h2>
+          <ul className={col}>
+            <li>
+              <Link className={link} to={paths.about}>
+                {t("nav.about")}
+              </Link>
+            </li>
+            {env.supportEmail && (
+              <li>
+                <a
+                  className={link}
+                  href={`mailto:${env.supportEmail}`}
+                  dir="ltr"
+                >
+                  {env.supportEmail}
+                </a>
+              </li>
+            )}
+            {env.whatsapp && (
+              <li>
+                <a
+                  className={link}
+                  href={waLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  dir="ltr"
+                >
+                  WhatsApp +{waDigits()}
+                </a>
+              </li>
             )}
           </ul>
         </nav>

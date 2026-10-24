@@ -3,10 +3,10 @@ import {
   ArrowDown,
   ArrowUp,
   ChevronsUpDown,
+  FileDown,
   FileSpreadsheet,
-  Printer,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { leasesApi } from "@/api/leases";
 import { propertiesApi } from "@/api/properties";
@@ -43,6 +43,15 @@ export default function RentRollPage() {
   });
   const today = todayISO();
   const n = (v: number) => formatNumber(v, lang);
+
+  // browsers use the page title as the default PDF file name
+  useEffect(() => {
+    const prev = document.title;
+    document.title = `PropFlow-rent-roll-${today}`;
+    return () => {
+      document.title = prev;
+    };
+  }, [today]);
 
   const props = useQuery({
     queryKey: ["properties", "rent-roll"],
@@ -220,7 +229,7 @@ export default function RentRollPage() {
             />
             <Button
               variant="secondary"
-              icon={<Printer className="size-4" />}
+              icon={<FileDown className="size-4" />}
               onClick={() => window.print()}
             >
               {t("lp.print")}
@@ -228,6 +237,7 @@ export default function RentRollPage() {
           </>
         }
       />
+      <p className="no-print mb-4 text-sm text-muted">{t("lp.printHint")}</p>
       <div className="no-print mb-5 max-w-xs">
         <Select
           label={t("tl.property")}

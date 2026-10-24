@@ -98,6 +98,7 @@ const en = {
     how: "How it works",
     faq: "FAQ",
     terms: "Terms",
+    about: "About and contact",
     privacy: "Privacy",
     groupOverview: "Overview",
     groupPortfolio: "Portfolio",
@@ -586,6 +587,7 @@ const en = {
       product: "Product",
       account: "Account",
       legal: "Legal",
+      company: "Company",
       forgot: "Reset password",
     },
     heroTitle: "Every unit, lease and repair, in one place.",
@@ -619,6 +621,41 @@ const en = {
     staffText:
       "You only see the jobs assigned to you. Mark them started or done and add photos of the work.",
     whoNav: "Who it's for",
+    demo: {
+      discover: [
+        ["Nile View Residence", "3 bd · 2 ba · 140 m²", "12,000 EGP / month"],
+        ["Garden Villa", "4 bd · 3 ba · 320 m²", "28,000 EGP / month"],
+        ["Corner Studio", "1 bd · 1 ba · 45 m²", "5,500 EGP / month"],
+      ],
+      stats: ["3", "24", "18", "4"],
+      occupancyValue: "75%",
+      occupancyNote: "18 of 24 units are rented",
+      counts: {
+        RENTED: "18",
+        AVAILABLE: "4",
+        MAINTENANCE: "2",
+      },
+      repair: [
+        ["Problem reported", "Unit 2A · 2 photos attached"],
+        ["Assigned to a technician", "Priority: urgent"],
+        ["Work started", "Checking the AC compressor"],
+        ["Resolved", "Cooling restored · photo attached"],
+      ],
+      tenant: [
+        ["Rental request · Unit 2A", "Sent on Oct 2"],
+        ["Lease · Unit 2A", "Jun 2026 – Jun 2027"],
+        ["Bedroom AC not working", "Reported on Oct 12"],
+      ],
+      owner: [
+        ["Request for Unit 3B", "3 bd · 9,500 EGP / month"],
+        ["Request for Unit 5C", "Studio · 6,000 EGP / month"],
+      ],
+      staff: [
+        "Water leak under the kitchen sink",
+        "Unit 2A · Nile View Residence",
+      ],
+      admin: ["PropFlow Team", "yousefshohber@gmail.com"],
+    },
     alt: {
       hero: "A modern residential building with a landscaped entrance",
       tower: "A tall residential tower against the sky",
@@ -853,6 +890,9 @@ const en = {
     },
     register: {
       title: "Create your account",
+      agreeStart: "I agree to the",
+      agreeAnd: "and the",
+      googleNote: "By continuing with Google you agree to the",
       subtitle: "Choose how you will use PropFlow. You can start in a minute.",
       firstName: "First name",
       lastName: "Last name",
@@ -924,6 +964,7 @@ const en = {
 
   /* ---------- Validation ---------- */
   v: {
+    terms: "You need to agree to the terms and the privacy policy to continue.",
     required: "This field is required",
     email: "Enter a valid email address",
     min8: "Use at least 8 characters",
@@ -1133,6 +1174,14 @@ const en = {
     noUnitsText: "Units appear here once an owner adds them.",
     allProperties: "All properties",
     fromProperty: "In {name}",
+    new: "Add unit",
+    chooseProperty: "Choose the property",
+    propertyPlaceholder: "Select a property…",
+    propertyRequired: "Choose the property this unit belongs to.",
+    propertyHint: "The unit will be added to this property.",
+    noPropertiesTitle: "Add a property first",
+    noPropertiesText:
+      "A unit belongs to a property, so you need at least one property before adding units.",
     unavailable: "This unit is no longer available",
     unavailableText: "It may have been rented or taken off the market.",
   },
@@ -1526,18 +1575,223 @@ const en = {
   },
 
   /* ---------- Legal ---------- */
+  about: {
+    title: "About and contact",
+    subtitle: "Who PropFlow is for, how it works, and how to reach us.",
+    intro:
+      "PropFlow is a rental management platform. It gives owners a clear way to manage properties, units and leases, gives tenants a clear way to request a unit, follow a lease and report problems, and gives maintenance teams only the tasks assigned to them.",
+    principlesTitle: "How we build it",
+    principles: [
+      [
+        "One record for everything",
+        "Every request, lease and repair is saved as its own record with a status and a history, so nobody has to ask for an update.",
+      ],
+      [
+        "Arabic and English",
+        "A real right-to-left interface, with dates and numbers that suit each language.",
+      ],
+      [
+        "Each person sees what concerns them",
+        "Tenants, owners, technicians and administrators each get their own screens and data.",
+      ],
+      [
+        "Honest about what it does",
+        "PropFlow records leases, rent amounts and dates. It does not process payments.",
+      ],
+    ],
+    contactTitle: "Contact us",
+    contactIntro:
+      "Questions, feedback or a problem with your account? Write to us and we will reply as soon as we can.",
+    email: "Email",
+    whatsapp: "WhatsApp",
+    none: "Contact details will appear here soon. In the meantime, the help center answers the most common questions.",
+    helpCta: "Visit the help center",
+  },
+
   legal: {
     termsTitle: "Terms of use",
     privacyTitle: "Privacy policy",
-    placeholder:
-      "Placeholder. The legal text for this page must come from the business before launch.",
-    sections: [
-      "Introduction",
-      "Using the service",
-      "Accounts and security",
-      "Contact",
-    ],
-    updated: "Last updated: to be set by the business",
+    updated: "Last updated: October 24, 2026",
+    terms: {
+      intro:
+        "These terms explain how you may use PropFlow. Please read them before creating an account. By signing up or using the service you agree to them.",
+      sections: [
+        [
+          "Introduction",
+          [
+            "PropFlow is a web platform that helps owners, tenants, maintenance staff and administrators manage rentals in one place: properties, units, rental requests, leases, renewals and maintenance requests.",
+            "If you do not agree with these terms, please do not use the service.",
+          ],
+        ],
+        [
+          "What PropFlow is, and what it is not",
+          [
+            "PropFlow records and organises information about rentals. It is not a party to any lease between an owner and a tenant, and it does not process payments or collect rent.",
+            "The lease summary you can save as a PDF is a record that helps both sides. It does not replace legal advice, and the owner and the tenant remain responsible for the actual agreement and for signing it as the law requires.",
+          ],
+        ],
+        [
+          "Accounts and roles",
+          [
+            "You must give accurate information when you register and keep it up to date. An account belongs to one person and must not be shared.",
+            "There are four kinds of account: tenant, owner, maintenance staff and administrator. Each one only sees the screens and data that concern it. An owner’s listings become visible to tenants once an administrator has verified the owner.",
+            "Keep your password private. You are responsible for what happens under your account, so tell us right away if you think someone else has used it. You can also sign in with Google, in which case Google’s own terms apply to that sign-in.",
+          ],
+        ],
+        [
+          "Owners: properties, units and leases",
+          [
+            "If you add a property or a unit, you confirm that you have the right to rent it out and that the details you enter are true, including the rent, the area, the number of rooms and the photos.",
+            "Accepting a rental request creates a pending lease for that tenant, and activating the lease marks the unit as rented. The terms of the lease are between you and the tenant, and you are responsible for them.",
+          ],
+        ],
+        [
+          "Tenants: requests and maintenance reports",
+          [
+            "A rental request tells the owner you are interested in a unit. It does not reserve the unit, and the owner may accept or decline it.",
+            "When you report a maintenance problem, describe it honestly and attach photos that show the real issue.",
+          ],
+        ],
+        [
+          "Acceptable use",
+          [
+            "You agree not to use PropFlow to break the law, to give false information, or to pretend to be someone else. You also agree not to upload content that you have no right to share or that is abusive or offensive.",
+            "You must not try to access other people’s data, bypass the security of the service, overload it, or copy its content automatically.",
+          ],
+        ],
+        [
+          "Your content",
+          [
+            "You keep ownership of the text and photos you add. By adding them you allow PropFlow to store them and to show them to the people involved, for example the owner and tenant of a lease, so that the service can work.",
+            "You are responsible for the content you add.",
+          ],
+        ],
+        [
+          "Activity records",
+          [
+            "Important actions, such as activating a lease or changing a role, are recorded with who did them and when. Administrators can review these records to keep the service secure and to help settle disagreements.",
+          ],
+        ],
+        [
+          "Availability and changes to the service",
+          [
+            "We work to keep PropFlow available and accurate, but the service is provided as it is, and we may change, pause or remove features. We may suspend or deactivate an account that breaks these terms. If your account was deactivated by mistake, contact us.",
+          ],
+        ],
+        [
+          "Limits of our responsibility",
+          [
+            "As far as the law allows, PropFlow is not responsible for disagreements between owners and tenants, for information entered incorrectly by users, for indirect losses, or for interruptions of the service.",
+          ],
+        ],
+        [
+          "Changes to these terms",
+          [
+            "We may update these terms from time to time. The date at the top shows the latest version. If you keep using PropFlow after a change, you accept the updated terms.",
+          ],
+        ],
+        [
+          "Governing law",
+          [
+            "These terms are governed by the laws of the Arab Republic of Egypt, and the competent Egyptian courts handle any dispute that cannot be settled amicably.",
+          ],
+        ],
+        [
+          "Contact",
+          ["If you have a question about these terms, get in touch with us."],
+        ],
+      ],
+    },
+    privacy: {
+      intro:
+        "This policy explains what personal information PropFlow collects, why we collect it and the choices you have.",
+      sections: [
+        [
+          "Introduction",
+          [
+            "PropFlow helps owners, tenants and maintenance teams manage rentals. To do that we need some personal information. This policy applies to the PropFlow website and application.",
+          ],
+        ],
+        [
+          "Information you give us",
+          [
+            "Account details: your name, email address, phone number if you add one, your password and a profile photo if you upload one. Your password is never shown to anyone.",
+            "Rental details: the properties, units, photos, rental requests, leases, renewal requests and maintenance reports you create, together with their dates, amounts and descriptions.",
+          ],
+        ],
+        [
+          "Information from Google",
+          [
+            "If you choose “Continue with Google”, Google shares your name and email address with us so we can create or find your account. We never receive your Google password.",
+          ],
+        ],
+        [
+          "Information collected automatically",
+          [
+            "To keep you signed in we use a secure session cookie that scripts cannot read. Your chosen language and light or dark theme are saved in your browser so the site looks the way you left it.",
+            "We do not use advertising trackers.",
+          ],
+        ],
+        [
+          "How we use your information",
+          [
+            "We use it to create and protect your account, to run the features you use (listings, requests, leases, maintenance), to send you notifications and service emails such as email verification and password reset, to keep a record of important actions for security, and to improve and fix the service.",
+          ],
+        ],
+        [
+          "Who can see what",
+          [
+            "Visibility depends on your role. A tenant’s name and contact details are visible to the owner of the unit they ask about or rent. A maintenance technician sees only the tasks assigned to them. Administrators can see accounts and activity records in order to verify owners, give support and keep the service safe.",
+            "Other users do not see your email address or phone number unless they are part of the same request, lease or maintenance task.",
+          ],
+        ],
+        [
+          "Sharing with service providers",
+          [
+            "We do not sell your personal information. We rely on trusted providers to host the service, store images, send emails and offer Google sign-in. They receive only what they need to do that work and are expected to protect it.",
+          ],
+        ],
+        [
+          "How long we keep information",
+          [
+            "We keep your information while your account is active. Leases, requests and activity records may be kept longer because they document agreements between other people and help prevent or settle disputes.",
+          ],
+        ],
+        [
+          "Security",
+          [
+            "We protect your information with measures such as encrypted connections, protected password storage and role-based access. No online service can promise absolute security, so please choose a strong password and keep it private.",
+          ],
+        ],
+        [
+          "Your choices",
+          [
+            "You can view and update your profile details from your profile page. You can ask us to correct your information, to deactivate your account, or to delete it where the law allows. Records that other people depend on, such as an existing lease, may need to be kept.",
+          ],
+        ],
+        [
+          "Children",
+          [
+            "PropFlow is meant for adults and is not directed to children under 18.",
+          ],
+        ],
+        [
+          "Changes to this policy",
+          [
+            "We may update this policy. The date at the top shows the latest version, and we will tell you about important changes in the app.",
+          ],
+        ],
+        [
+          "Contact",
+          [
+            "If you have a question about your privacy or want to use one of your choices, get in touch with us.",
+          ],
+        ],
+      ],
+    },
+    contactUs: "Email us",
+    contactHelp: "Visit the help page",
+    back: "Back to home",
   },
 
   /* ---------- Server error codes (chosen by code, never by message) ---------- */
@@ -1589,7 +1843,9 @@ const en = {
   },
 
   lp: {
-    print: "Print",
+    print: "Download PDF",
+    printHint:
+      "In the print window choose \u201cSave as PDF\u201d as the destination. Turn off \u201cHeaders and footers\u201d for a clean page.",
     startsIn: "Starts in {n} days",
     dayOf: "Day {x} of {y}",
     left: "{n} days left",

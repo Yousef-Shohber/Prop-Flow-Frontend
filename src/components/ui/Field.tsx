@@ -82,7 +82,13 @@ interface BaseProps {
 export const Input = forwardRef<
   HTMLInputElement,
   InputHTMLAttributes<HTMLInputElement> &
-    BaseProps & { startAdornment?: ReactNode }
+    BaseProps & {
+      startAdornment?: ReactNode;
+      /** Interactive element drawn inside the input, vertically centred on the input (not on the label). */
+      endAdornment?: ReactNode;
+      /** Position class for the end adornment. Defaults to the logical `end-2`. */
+      endAdornmentClassName?: string;
+    }
 >(function Input(
   {
     label,
@@ -92,6 +98,8 @@ export const Input = forwardRef<
     wrapperClassName,
     className,
     startAdornment,
+    endAdornment,
+    endAdornmentClassName = "end-2",
     id,
     ...rest
   },
@@ -127,6 +135,16 @@ export const Input = forwardRef<
           )}
           {...rest}
         />
+        {endAdornment && (
+          <span
+            className={cn(
+              "absolute inset-y-0 flex items-center",
+              endAdornmentClassName,
+            )}
+          >
+            {endAdornment}
+          </span>
+        )}
       </div>
     </FieldShell>
   );

@@ -15,6 +15,7 @@ import { useApiError } from "@/lib/useApiError";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes/paths";
 import { AuthLayout } from "./AuthLayout";
+import { PrivacyLink, TermsLink } from "./ConsentLinks";
 import { GoogleButton } from "./LoginPage";
 import { PasswordField } from "./PasswordField";
 import { env } from "@/lib/env";
@@ -26,6 +27,7 @@ interface Values {
   email: string;
   password: string;
   role: "TENANT" | "OWNER";
+  acceptTerms: boolean;
 }
 
 export default function RegisterPage() {
@@ -50,14 +52,17 @@ export default function RegisterPage() {
       email: "",
       password: "",
       role: "TENANT",
+      acceptTerms: false,
     },
   });
 
   const onSubmit = handleSubmit(async (v) => {
     setFormError(null);
     try {
+      // acceptTerms is a front-end consent gate only; the API does not take it
+      const { acceptTerms: _consent, ...payload } = v;
       await authApi.register({
-        ...v,
+        ...payload,
         email: v.email.trim(),
         phone: v.phone?.trim() || undefined,
       });
@@ -185,6 +190,15 @@ export default function RegisterPage() {
           error={errors.email?.message}
           {...register("email")}
         />
+        <PasswordField
+          label={t("auth.register.password")}
+          hint={t("auth.register.passwordHint")}
+          autoComplete="new-password"
+          showStrength
+          value={watch("password")}
+          error={errors.password?.message}
+          {...register("password")}
+        />
         <Input
           label={t("auth.register.phone")}
           type="tel"
@@ -195,15 +209,30 @@ export default function RegisterPage() {
           error={errors.phone?.message}
           {...register("phone")}
         />
-        <PasswordField
-          label={t("auth.register.password")}
-          hint={t("auth.register.passwordHint")}
-          autoComplete="new-password"
-          showStrength
-          value={watch("password")}
-          error={errors.password?.message}
-          {...register("password")}
-        />
+        <div>
+          <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed">
+            <input
+              type="checkbox"
+              className="mt-1 size-4 shrink-0 accent-[var(--accent)]"
+              aria-invalid={!!errors.acceptTerms || undefined}
+              aria-describedby={errors.acceptTerms ? "terms-err" : undefined}
+              {...register("acceptTerms")}
+            />
+            <span className="text-muted">
+              {t("auth.register.agreeStart")} <TermsLink />{" "}
+              {t("auth.register.agreeAnd")} <PrivacyLink />
+            </span>
+          </label>
+          {errors.acceptTerms && (
+            <p
+              id="terms-err"
+              role="alert"
+              className="mt-1.5 text-xs font-medium text-[var(--red-fg)]"
+            >
+              {errors.acceptTerms.message}
+            </p>
+          )}
+        </div>
         <Button
           type="submit"
           size="lg"
@@ -221,6 +250,10 @@ export default function RegisterPage() {
             <span className="h-px flex-1 bg-line" />
           </div>
           <GoogleButton />
+          <p className="mt-3 text-center text-xs leading-relaxed text-muted">
+            {t("auth.register.googleNote")} <TermsLink />{" "}
+            {t("auth.register.agreeAnd")} <PrivacyLink />
+          </p>
         </>
       )}
     </AuthLayout>
